@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="card mb-3 col-8 mx-auto">
+        <div class="card-body text-center">
+
+            <ng-container [ngTemplateOutlet]="success ? successCard : failure ? failureCard : journeyCard">
+
+                <ng-template #successCard>
+                    <h2 class="card-title">{{ title }}</h2>
+                    <div
+                         class="spinner-border"
+                         role="status"></div>
+                </ng-template>
+
+                <ng-template #failureCard>
+                    <div>
+                        <h2 class="card-title">{{ title }}</h2>
+                        <button
+                                class="btn btn-primary"
+                                (click)="reset()">
+                            Start Again
+                        </button>
+                    </div>
+                </ng-template>
+
+                <ng-template #journeyCard>
+                    <div>
+                        <h2 class="card-title" *ngIf="title">{{ title }}</h2>
+                        <h5
+                            class="card-title"
+                            v-html="description"></h5>
+                        <div id="callbacks">
+                            <form *ngIf="step; else blank_form"
+                                  class="m-5">
+                                <div
+                                     *ngFor="let callback of step?.callbacks"
+                                     v-bind:key="callback.payload._id">
+
+                                    <app-text *ngIf="callback.getType() === 'NameCallback'" [callback]="$any(callback)" (updatedCallback)="$any(callback).setName($event)"></app-text>
+
+                                    <app-password *ngIf="callback.getType() === 'PasswordCallback'" [callback]="$any(callback)" (updatedCallback)="$any(callback).setPassword($event)"></app-password>
+
+                                </div>
+                            </form>
+                            <ng-template #blank_form>
+                                <form
+                                      class="m-5"></form>
+                            </ng-template>
+                        </div>
+
+                        <div id="controls">
+                            <button
+                                    class="btn btn-primary"
+                                    (click)="nextStep(step)">Next</button>
+                            <hr />
+                            Something not right?<button
+                                    type="button"
+                                    class="btn btn-link"
+                                    (click)="reset()">
+                                Start Again
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </ng-container>
+        </div>
+    </div>
+</div>

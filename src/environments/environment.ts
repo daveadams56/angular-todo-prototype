@@ -2,8 +2,16 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// TODO replace with process.env variables
 export const environment = {
-  production: false
+  production: false,
+  AM_URL: "https://openam-david-sdk.forgeblocks.com/am",
+  REALM_PATH: "alpha",
+  WEB_OAUTH_CLIENT: "WebOAuthClient",
+  JOURNEY_LOGIN: "Login",
+  JOURNEY_REGISTER: "Registration",
+  API_URL: "https://api.example.com:9443",
+  APP_URL: "https://app.example.com:8443"
 };
 
 /*
