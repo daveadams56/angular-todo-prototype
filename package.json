@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve & node -r dotenv/config ./server/index.mjs",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -18,7 +18,11 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "pouchdb": "^7.2.2",
     "rxjs": "~6.6.0",
+    "superagent": "^6.1.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

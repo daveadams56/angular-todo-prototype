@@ -43,3 +43,13 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Sample data
+todos/*
+users/*
+
+# Certificates
+*.pem
+
+# Environment files
+.env

@@ -69,6 +69,13 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {
+            "host": "app.example.com",
+            "port": 8443,
+            "ssl": true,
+            "sslCert": "./example.com+5.pem",
+            "sslKey": "./example.com+5-key.pem"
+          },
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
