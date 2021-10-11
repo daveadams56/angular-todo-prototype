@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="card mb-3 col-8 mx-auto">
+    <div class="card mb-3 col-4 mx-auto">
         <div class="card-body text-center">
 
             <ng-container [ngTemplateOutlet]="success ? successCard : failure ? failureCard : journeyCard">
@@ -9,6 +9,8 @@
                     <div
                          class="spinner-border"
                          role="status"></div>
+                         <br>
+                    <button class="btn btn-primary" (click)="logout()">Logout</button>
                 </ng-template>
 
                 <ng-template #failureCard>

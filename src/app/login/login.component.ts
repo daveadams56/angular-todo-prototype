@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Config, FRAuth, FRStep, FRLoginFailure, FRLoginSuccess } from '@forgerock/javascript-sdk'
+import { Router } from '@angular/router';
+import { Config, FRAuth, FRStep, FRLoginFailure, FRLoginSuccess, FRUser } from '@forgerock/javascript-sdk'
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -14,7 +15,7 @@ export class LoginComponent implements OnInit {
   success?: FRLoginSuccess
   title?: String
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -78,6 +79,14 @@ export class LoginComponent implements OnInit {
     this.success = undefined;
     this.title = undefined;
     this.nextStep();
+  }
+
+  logout() {
+    FRUser.logout().then(() => this.redirectToHome());
+  }
+
+  redirectToHome() {
+    this.router.navigateByUrl('/home');
   }
 
 }
