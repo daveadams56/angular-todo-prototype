@@ -81,10 +81,6 @@ export class LoginComponent implements OnInit {
     this.nextStep();
   }
 
-  logout() {
-    FRUser.logout().then(() => this.redirectToHome());
-  }
-
   redirectToHome() {
     this.router.navigateByUrl('/home');
   }
