@@ -1,6 +1,24 @@
-<div class="mx-auto">
-    <h2>Welcome</h2>
-    <p>Please log in to begin</p>
+<div class="text-center">
 
-    <button class="btn btn-success" [routerLink]="'/login'"> Login now</button>
+    <ng-container [ngTemplateOutlet]="userService.info ? personalisedWelcome : genericWelcome">
+
+        <ng-template #personalisedWelcome>
+            <h2>Welcome {{userService.info?.given_name}}</h2>
+
+            <p>Manage your todos</p>
+            <button class="btn btn-success" [routerLink]="'/login'">View todos</button>
+            <app-logout></app-logout>
+        </ng-template>
+
+        <ng-template #genericWelcome>
+            <h2>Welcome</h2>
+
+            <p>Please log in to begin</p>
+            <button class="btn btn-success" [routerLink]="'/login'"> Login now</button>
+        </ng-template>
+
+    </ng-container>
+
+    
+    
 </div>

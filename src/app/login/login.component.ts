@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Config, FRAuth, FRStep, FRLoginFailure, FRLoginSuccess, FRUser } from '@forgerock/javascript-sdk'
-import { environment } from '../../environments/environment';
+import { FRAuth, FRStep, FRLoginFailure, FRLoginSuccess, FRUser, TokenManager, UserManager } from '@forgerock/javascript-sdk'
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-login',
@@ -15,24 +15,9 @@ export class LoginComponent implements OnInit {
   success?: FRLoginSuccess
   title?: String
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, public userService: UserService) { }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
-    Config.set({
-      clientId: environment.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient'
-      redirectUri: environment.APP_URL, // e.g. 'https://sdkapp.example.com:8443/_callback'
-      scope: "openid profile", // e.g. 'openid profile me.read'
-      serverConfig: {
-        baseUrl: environment.AM_URL, // e.g. 'https://openam.example.com:9443/openam/'
-        timeout: 30000, // 90000 or less
-      },
-      realmPath: environment.REALM_PATH, // e.g. 'root'
-      tree: environment.JOURNEY_LOGIN, // e.g. 'Login'
-    });
-
     this.nextStep();
   }
 
@@ -64,13 +49,21 @@ export class LoginComponent implements OnInit {
   handleSuccess(success?: FRLoginSuccess) {
     this.title = "You are now authenticated"
     this.success = success;
-    console.log("success")
+    console.log("success");
+
+    TokenManager.getTokens({ forceRenew: true }).then(() => {
+      UserManager.getCurrentUser().then((info) => {
+        this.userService.info = info;
+        this.userService.isAuthenticated = true;
+
+        this.redirectToHome();
+      });
+    });
   }
 
   handleStep(step?: FRStep) {
     this.step = step;
     this.title = step?.getHeader();
-    console.log("step");
   }
 
   reset() {
