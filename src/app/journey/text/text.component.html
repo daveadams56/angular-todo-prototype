@@ -6,7 +6,7 @@
     <input
            type="text"
            class="form-control"
-           :id="'password' + callback.payload._id"
-           placeholder="Please enter your username"
+           [id]="'text' + callback?.payload?._id"
+           [placeholder]="callback?.getPrompt()"
            (input)="updateValue($event)" />
 </div>
