@@ -37,14 +37,6 @@ export class TodosComponent implements OnInit {
     });
   }
 
-  completeTodo(todo: Todo): void {
-    this.todoService.completeTodo(todo).then(response => {
-      response.json().then((json) => {
-        this.getTodos();
-      });
-    });
-  }
-
   resetNewTodo(): void {
     this.newTodo = { _id: "", title: "", completed: false };
   }

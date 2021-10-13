@@ -22,41 +22,7 @@
             <ng-template #todolist>
                 <ul>
                     <li class="cstm_todo-item list-group-item list-group-item-action p-0" *ngFor="let todo of todos">
-                        <div class="row">
-                            <div class="col-6">
-                                <input [id]="todo._id" class="cstm_form-check form-check-input visually-hidden" type="checkbox" />
-                                <label [ngClass]="{'cstm_todo-label_complete': todo.completed}">
-                                    {{todo.title}}
-                                </label>
-                                
-                            </div>
-
-                            <div class="col-6">
-                                <button class="btn btn-sm btn-secondary float-right ml-auto" (click)="completeTodo(todo)">Complete</button>
-                            </div>
-
-                            <!-- <div class="dropdown col-2 text-end" aria-expanded="false">
-                                <button
-                                        class="cstm_dropdown-actions btn h-100"
-                                        data-bs-toggle="dropdown">
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    <li>
-                                        <button class="dropdown-item">
-                                            Edit
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button
-                                                class="dropdown-item"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal">
-                                            Delete
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div> -->
-                        </div>
+                        <app-todo [todo]="todo" (updated)="getTodos()"></app-todo>
                     </li>
                 </ul>
 
