@@ -37,4 +37,20 @@ export class TodoService {
     });
   }
 
+  completeTodo(todo: Todo): Promise<Response> {
+    todo.completed = !todo.completed;
+
+    return HttpClient.request({
+      url: `${environment.API_URL}/todos/${todo._id}`,
+      init: {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(todo),
+        method: "POST"
+      },
+      timeout: 5000
+    });
+  }
+
 }

@@ -1,4 +1,4 @@
-<div class="cstm_container container-fluid">
+<div class="text-center w-50 m-auto">
 
     <h1 class="mt-5 ">Your Todos</h1>
     <p class="fs-6 text-muted">Create and manage your todos.</p>
@@ -23,14 +23,19 @@
                 <ul>
                     <li class="cstm_todo-item list-group-item list-group-item-action p-0" *ngFor="let todo of todos">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-6">
                                 <input [id]="todo._id" class="cstm_form-check form-check-input visually-hidden" type="checkbox" />
-                                <label>
+                                <label [ngClass]="{'cstm_todo-label_complete': todo.completed}">
                                     {{todo.title}}
                                 </label>
+                                
                             </div>
 
-                            <div class="dropdown col-2 text-end" aria-expanded="false">
+                            <div class="col-6">
+                                <button class="btn btn-sm btn-secondary float-right ml-auto" (click)="completeTodo(todo)">Complete</button>
+                            </div>
+
+                            <!-- <div class="dropdown col-2 text-end" aria-expanded="false">
                                 <button
                                         class="cstm_dropdown-actions btn h-100"
                                         data-bs-toggle="dropdown">
@@ -50,7 +55,7 @@
                                         </button>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </li>
                 </ul>
