@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
   }
 
   redirectToHome() {
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/todos');
   }
 
 }

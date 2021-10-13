@@ -13,25 +13,8 @@ export class HomeComponent implements OnInit {
   constructor(public userService: UserService) { }
 
   ngOnInit(): void {
-    this.checkUserAuthenticated();
+    this.userService.refreshUserAuthentication();
   }
 
-  checkUserAuthenticated(): void {
-    TokenStorage.get().then(tokens => {
-      // Assume user is likely authenticated if there are tokens
-      this.userService.isAuthenticated;
-
-      console.log("user authenticated")
-      UserManager.getCurrentUser().then((info) => {
-        this.userService.info = info;
-        console.log(info);
-      }).catch(error => {
-        // User likely has stale tokens; log them out
-        FRUser.logout();
-      });
-    }).catch(error => {
-      // User is probably not authenticated
-      console.log("user not authenticated: " + error)
-    })
-  }
+  
 }
