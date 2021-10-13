@@ -1,1 +1,81 @@
-<p>todos works!</p>
+<div class="cstm_container container-fluid">
+
+    <h1 class="mt-5 ">Your Todos</h1>
+    <p class="fs-6 text-muted">Create and manage your todos.</p>
+
+    <app-logout></app-logout>
+
+    <hr>
+
+    <div class="card shadow-sm mb-5 ">
+        <form (ngSubmit)="createTodo()" #newTodoForm="ngForm" class="p-3 d-flex">
+            <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
+                <input id="newTodo" type="text" class="cstm_form-control form-control bg-transparent"
+                       placeholder="What needs doing?" required="" [(ngModel)]="newTodo.title" name="title">
+                <label for="newTodo">What needs doing?</label>
+            </div>
+            <button type="submit" class="btn btn-primary ms-2" [disabled]="!newTodoForm.form.valid">Create</button>
+        </form>
+
+        <ng-container [ngTemplateOutlet]="todos.length > 0 ? todolist : empty">
+
+            <ng-template #todolist>
+                <ul>
+                    <li class="cstm_todo-item list-group-item list-group-item-action p-0" *ngFor="let todo of todos">
+                        <div class="row">
+                            <div class="col">
+                                <input [id]="todo._id" class="cstm_form-check form-check-input visually-hidden" type="checkbox" />
+                                <label>
+                                    {{todo.title}}
+                                </label>
+                            </div>
+
+                            <div class="dropdown col-2 text-end" aria-expanded="false">
+                                <button
+                                        class="cstm_dropdown-actions btn h-100"
+                                        data-bs-toggle="dropdown">
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li>
+                                        <button class="dropdown-item">
+                                            Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                                class="dropdown-item"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal">
+                                            Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- <ul class="list-group list-group-flush mb-1">
+                <app-todo *ngFor="let todo of todos" todo?="todo"></app-todo>
+            </ul> -->
+
+                <!-- <app-todo *ngFor="let todo of todos" todo?="todo"></app-todo> -->
+            </ng-template>
+
+            <ng-template #empty>
+                <div class="card shadow-sm mb-5 w-50 mx-auto">
+                    <ul class="list-group list-group-flush mb-1 ">
+                        <li class="cstm_todo-item list-group-item list-group-item-action p-0">
+                            <div class="row">
+                                <p class="col d-flex align-items-center fs-5 text-muted w-100 ms-3 p-3">No todos yet. Create one above!</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </ng-template>
+
+        </ng-container>
+    </div>
+
+</div>

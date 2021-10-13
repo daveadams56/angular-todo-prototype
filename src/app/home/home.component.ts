@@ -1,5 +1,6 @@
+import { Token } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { TokenManager, UserManager, TokenStorage } from '@forgerock/javascript-sdk';
+import { TokenManager, UserManager, TokenStorage, FRUser } from '@forgerock/javascript-sdk';
 import { UserService } from '../user.service';
 
 @Component({
@@ -24,6 +25,9 @@ export class HomeComponent implements OnInit {
       UserManager.getCurrentUser().then((info) => {
         this.userService.info = info;
         console.log(info);
+      }).catch(error => {
+        // User likely has stale tokens; log them out
+        FRUser.logout();
       });
     }).catch(error => {
       // User is probably not authenticated

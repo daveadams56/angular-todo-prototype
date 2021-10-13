@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
+import { FormsModule } from '@angular/forms';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { TextComponent } from './journey/text/text.component';
@@ -9,6 +11,7 @@ import { PasswordComponent } from './journey/password/password.component';
 import { HomeComponent } from './home/home.component';
 import { TodosComponent } from './todos/todos.component';
 import { LogoutComponent } from './logout/logout.component';
+import { TodoComponent } from './todo/todo.component';
 
 @NgModule({
   declarations: [
@@ -18,11 +21,13 @@ import { LogoutComponent } from './logout/logout.component';
     PasswordComponent,
     HomeComponent,
     TodosComponent,
-    LogoutComponent
+    LogoutComponent,
+    TodoComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
