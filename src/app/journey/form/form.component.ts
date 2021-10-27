@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 import { FRAuth, FRLoginFailure, FRLoginSuccess, FRStep, TokenManager, UserManager, StepType } from '@forgerock/javascript-sdk';
 import { UserService } from 'src/app/user.service';
 
@@ -15,18 +16,21 @@ export class FormComponent implements OnInit {
   step?: FRStep;
   failure?: FRLoginFailure
   success?: FRLoginSuccess
-  title?: String
+  title?: string
+  buttonText?: string
   submittingForm: boolean = false
+  tree?: string
 
   constructor(private router: Router, public userService: UserService) { }
 
   ngOnInit(): void {
+    this.setConfigForAction(this.action);
     this.nextStep();
   }
 
   nextStep(step?: FRStep): void {
     this.submittingForm = true;
-    FRAuth.next(step)
+    FRAuth.next(step, { tree: this.tree })
       .then((step) => {
         switch (step.type) {
           case 'LoginFailure':
@@ -46,15 +50,11 @@ export class FormComponent implements OnInit {
   }
 
   handleFailure(failure?: FRLoginFailure) {
-    this.title = "Sorry, that didn't work"
     this.failure = failure;
-    console.log("failure: ")
   }
 
   handleSuccess(success?: FRLoginSuccess) {
-    this.title = "You are now authenticated"
     this.success = success;
-    console.log("success");
 
     TokenManager.getTokens({ forceRenew: true }).then(() => {
       UserManager.getCurrentUser().then((info) => {
@@ -68,7 +68,32 @@ export class FormComponent implements OnInit {
 
   handleStep(step?: FRStep) {
     this.step = step;
-    this.title = step?.getHeader();
+
+    this.setConfigForAction(this.action);
+
+    if (step?.getHeader()) {
+      this.title = step?.getHeader();
+    }
+  }
+
+  setConfigForAction(action?: string) {
+    switch (action) {
+      case 'login': {
+        this.title = "Sign In";
+        this.buttonText = "Sign In"
+        this.tree = environment.JOURNEY_LOGIN
+      } break;
+      case 'register': {
+        this.title = "Sign Up";
+        this.buttonText = "Register",
+        this.tree = environment.JOURNEY_REGISTER
+      } break;
+      default: {
+        this.title = "Welcome";
+        this.buttonText = "Next"
+        this.tree = environment.JOURNEY_LOGIN
+      } break;
+    }
   }
 
   reset() {

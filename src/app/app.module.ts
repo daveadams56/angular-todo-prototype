@@ -23,6 +23,7 @@ import { EyeIconComponent } from './icons/eye-icon/eye-icon.component';
 import { AlertComponent } from './journey/alert/alert.component';
 import { AlertIconComponent } from './icons/alert-icon/alert-icon.component';
 import { VerifiedIconComponent } from './icons/verified-icon/verified-icon.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { VerifiedIconComponent } from './icons/verified-icon/verified-icon.compo
     EyeIconComponent,
     AlertComponent,
     AlertIconComponent,
-    VerifiedIconComponent
+    VerifiedIconComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

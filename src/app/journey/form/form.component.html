@@ -26,13 +26,8 @@
                         <app-password *ngIf="callback.getType() === 'PasswordCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setPassword($event)"></app-password>
     
                     </div>
-                    <app-button [buttonText]="'Next'" [submittingForm]="submittingForm"></app-button>
+                    <app-button [buttonText]="buttonText" [submittingForm]="submittingForm"></app-button>
                 </form>
-                <ng-template #blank_form>
-                    <form
-                          class="m-5"></form>
-                    nothing
-                </ng-template>
             </div>
         </div>
     </ng-template>

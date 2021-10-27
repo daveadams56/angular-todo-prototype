@@ -1,0 +1,20 @@
+<div class="cstm_container_v-centered container-fluid d-flex align-items-center">
+    <div class="w-100">
+
+        <app-back-home></app-back-home>
+
+        <div class="card shadow-sm p-5 mb-2 w-100">
+            <div class="cstm_form-icon  align-self-center mb-3">
+                <app-key-icon size="72px"></app-key-icon>
+            </div>
+
+            <app-form [action]="'register'"></app-form>
+
+            <p
+               class="text-center text-secondary p-3">
+                Already have an account?
+                <a [routerLink]="'/login'">Sign in here!</a>
+            </p>
+        </div>
+    </div>
+</div>
