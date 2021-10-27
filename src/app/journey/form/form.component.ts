@@ -63,7 +63,7 @@ export class FormComponent implements OnInit {
 
         this.router.navigateByUrl('/todos');
       });
-    });
+    }).catch(console.error);
   }
 
   handleStep(step?: FRStep) {

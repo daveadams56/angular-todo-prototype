@@ -19,7 +19,9 @@ export class LogoutComponent implements OnInit {
     FRUser.logout().then(() => {
       this.userService.info = undefined;
       this.userService.isAuthenticated = false;
-      this.redirectToHome()
+      setTimeout(() => this.redirectToHome(), 1000);
+    }).catch(err => {
+      console.error(`Error: logout did not successfully complete; ${err}`);
     });
   }
 
