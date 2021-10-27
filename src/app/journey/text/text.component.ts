@@ -9,7 +9,12 @@ import { NameCallback } from '@forgerock/javascript-sdk/lib';
 export class TextComponent implements OnInit {
 
   @Input() callback?: NameCallback
+  @Input() name?: string
   @Output() updatedCallback = new EventEmitter<string>();
+
+  // TODO make this reactive to policy requirements
+  isRequired: boolean = false;
+  stringAttributeName: string = "text"
 
   constructor() {
   }

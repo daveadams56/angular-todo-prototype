@@ -9,7 +9,13 @@ import { PasswordCallback } from '@forgerock/javascript-sdk/lib';
 export class PasswordComponent implements OnInit {
 
   @Input() callback?: PasswordCallback
+  @Input() name?: string
   @Output() updatedCallback = new EventEmitter<string>();
+
+  isVisible: boolean = false;
+  // TODO make this reactive to policy requirements
+  isRequired: boolean = false;
+  stringAttributeName: string = "text"
 
   constructor() { }
 
@@ -18,6 +24,10 @@ export class PasswordComponent implements OnInit {
 
   updateValue(event: any): void {
     this.updatedCallback.emit(event.target.value);
+  }
+
+  toggleVisibility(): void {
+    this.isVisible = !this.isVisible;
   }
 
 }

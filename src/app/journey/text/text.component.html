@@ -1,12 +1,15 @@
 <div
-     class="form-group">
-    <label
-           attr.for="{{'name' + callback?.payload?._id}}"
-           class="form-label mt-4">{{callback?.getPrompt()}}</label>
-    <input
-           type="text"
-           class="form-control"
-           [id]="'text' + callback?.payload?._id"
-           [placeholder]="callback?.getPrompt()"
-           (input)="updateValue($event)" />
+     class="cstm_form-floating form-floating mb-3">
+       <!-- TODO Put validation classes in input -->
+       <input
+              class="cstm_form-control form-control bg-transparent"
+              [id]="name"
+              [name]="name"
+              [placeholder]="callback?.getPrompt()"
+              [required]="isRequired ? 'required' : ''"
+              (input)="updateValue($event)"
+              [type]="stringAttributeName == 'mail' ? 'email' : 'text'" />
+       <label
+              [for]="name">{{callback?.getPrompt()}}</label>
+       <!-- TODO Put validation messages here -->
 </div>
