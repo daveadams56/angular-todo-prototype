@@ -12,6 +12,17 @@ import { HomeComponent } from './home/home.component';
 import { TodosComponent } from './todos/todos.component';
 import { LogoutComponent } from './logout/logout.component';
 import { TodoComponent } from './todo/todo.component';
+import { BackHomeComponent } from './utilities/back-home/back-home.component';
+import { LoadingComponent } from './utilities/loading/loading.component';
+import { HomeIconComponent } from './icons/home-icon/home-icon.component';
+import { LeftArrowIconComponent } from './icons/left-arrow-icon/left-arrow-icon.component';
+import { KeyIconComponent } from './icons/key-icon/key-icon.component';
+import { FormComponent } from './journey/form/form.component';
+import { ButtonComponent } from './journey/button/button.component';
+import { EyeIconComponent } from './icons/eye-icon/eye-icon.component';
+import { AlertComponent } from './journey/alert/alert.component';
+import { AlertIconComponent } from './icons/alert-icon/alert-icon.component';
+import { VerifiedIconComponent } from './icons/verified-icon/verified-icon.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +33,18 @@ import { TodoComponent } from './todo/todo.component';
     HomeComponent,
     TodosComponent,
     LogoutComponent,
-    TodoComponent
+    TodoComponent,
+    BackHomeComponent,
+    LoadingComponent,
+    HomeIconComponent,
+    LeftArrowIconComponent,
+    KeyIconComponent,
+    FormComponent,
+    ButtonComponent,
+    EyeIconComponent,
+    AlertComponent,
+    AlertIconComponent,
+    VerifiedIconComponent
   ],
   imports: [
     BrowserModule,
