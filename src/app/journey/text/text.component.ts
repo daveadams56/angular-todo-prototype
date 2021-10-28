@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NameCallback } from '@forgerock/javascript-sdk/lib';
+import { AttributeInputCallback, NameCallback, ValidatedCreateUsernameCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-text',
@@ -8,7 +8,7 @@ import { NameCallback } from '@forgerock/javascript-sdk/lib';
 })
 export class TextComponent implements OnInit {
 
-  @Input() callback?: NameCallback
+  @Input() callback?: NameCallback | ValidatedCreateUsernameCallback | AttributeInputCallback<string>
   @Input() name?: string
   @Output() updatedCallback = new EventEmitter<string>();
 

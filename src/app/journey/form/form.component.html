@@ -20,11 +20,27 @@
                     <div
                          *ngFor="let callback of step?.callbacks"
                          v-bind:key="callback.payload._id">
-    
-                        <app-text *ngIf="callback.getType() === 'NameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)"></app-text>
-    
-                        <app-password *ngIf="callback.getType() === 'PasswordCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setPassword($event)"></app-password>
-    
+
+                        <!-- TODO add validation -->
+
+
+                        <container-element [ngSwitch]="callback.getType()">
+                            <app-text *ngSwitchCase="'NameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)"></app-text>
+                            <app-text *ngSwitchCase="'ValidatedCreateUsernameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)"></app-text>
+                            <app-text *ngSwitchCase="'StringAttributeInputCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setValue($event)"></app-text>
+
+                            <app-password *ngSwitchCase="'PasswordCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setPassword($event)"></app-password>
+                            <app-password *ngSwitchCase="'ValidatedCreatePasswordCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setPassword($event)"></app-password>
+
+                            <app-boolean *ngSwitchCase="'BooleanAttributeInputCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setValue($event)"></app-boolean>
+
+                            <app-terms-conditions *ngSwitchCase="'TermsAndConditionsCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setAccepted($event)"></app-terms-conditions>
+
+                            <app-kba *ngSwitchCase="'KbaCreateCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (setQuestion)="$any(callback).setQuestion($event)" (setAnswer)="$any(callback).setAnswer($event)"></app-kba>
+
+                            <app-unknown *ngSwitchDefault [callback]="callback"></app-unknown>
+                        </container-element>
+
                     </div>
                     <app-button [buttonText]="buttonText" [submittingForm]="submittingForm"></app-button>
                 </form>

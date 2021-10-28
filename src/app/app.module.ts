@@ -24,6 +24,12 @@ import { AlertComponent } from './journey/alert/alert.component';
 import { AlertIconComponent } from './icons/alert-icon/alert-icon.component';
 import { VerifiedIconComponent } from './icons/verified-icon/verified-icon.component';
 import { RegisterComponent } from './register/register.component';
+import { UnknownComponent } from './journey/unknown/unknown.component';
+import { BooleanComponent } from './journey/boolean/boolean.component';
+import { TermsConditionsComponent } from './journey/terms-conditions/terms-conditions.component';
+import { KbaComponent } from './journey/kba/kba.component';
+import { LockIconComponent } from './icons/lock-icon/lock-icon.component';
+import { NewUserIconComponent } from './icons/new-user-icon/new-user-icon.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +52,13 @@ import { RegisterComponent } from './register/register.component';
     AlertComponent,
     AlertIconComponent,
     VerifiedIconComponent,
-    RegisterComponent
+    RegisterComponent,
+    UnknownComponent,
+    BooleanComponent,
+    TermsConditionsComponent,
+    KbaComponent,
+    LockIconComponent,
+    NewUserIconComponent
   ],
   imports: [
     BrowserModule,
