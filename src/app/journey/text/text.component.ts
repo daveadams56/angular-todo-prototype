@@ -24,6 +24,7 @@ export class TextComponent implements OnInit {
 
   ngOnInit(): void {
     this.isRequired = this.getIsRequired(this.callback);
+    console.log(this.callback?.getPrompt() + " " + this.isRequired)
     this.failureMessages = this.evaluateFailedPolicies(this.callback);
   }
 
@@ -37,13 +38,11 @@ export class TextComponent implements OnInit {
     
     const policies = callback.getPolicies();
 
-    if (policies.policyRequirements) {
+    if (callback.getType() === "ValidatedCreateUsernameCallback") {
       return policies.policyRequirements.includes('REQUIRED');
-    } else if (callback?.isRequired) {
+    } else {
       return callback.isRequired();
     }
-
-    return false;
   }
 
   evaluateFailedPolicies(callback?: NameCallback | ValidatedCreateUsernameCallback | AttributeInputCallback<string>): string[] {

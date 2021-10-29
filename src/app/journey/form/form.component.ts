@@ -101,6 +101,7 @@ export class FormComponent implements OnInit {
     this.failure = undefined;
     this.success = undefined;
     this.title = undefined;
+    this.submittingForm = false;
     this.nextStep();
   }
 }

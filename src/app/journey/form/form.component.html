@@ -21,9 +21,6 @@
                          *ngFor="let callback of step?.callbacks"
                          v-bind:key="callback.payload._id">
 
-                        <!-- TODO add validation -->
-
-
                         <container-element [ngSwitch]="callback.getType()">
                             <app-text *ngSwitchCase="'NameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)"></app-text>
                             <app-text *ngSwitchCase="'ValidatedCreateUsernameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)"></app-text>

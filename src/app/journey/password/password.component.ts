@@ -54,8 +54,6 @@ export class PasswordComponent implements OnInit {
 
     const validationFailures: string[] = [];
 
-    console.log(failedPolicies)
-
     failedPolicies.forEach(policy => {
       const policyObj = JSON.parse(JSON.parse(JSON.stringify(policy)))
 
