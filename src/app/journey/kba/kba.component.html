@@ -17,7 +17,8 @@
             <option value="">No selection</option>
 
             <option *ngFor="let question of callback?.getPredefinedQuestions()"
-                         v-bind:key="question">{{question}}</option>
+                         v-bind:key="question"
+                         [selected]="callback?.payload?.input?.[0]?.value === question">{{question}}</option>
         </select>
         <label [for]="name">{{callback?.getPrompt()}}</label>
     </div>
@@ -30,7 +31,8 @@
                (input)="answerSet($event)"
                placeholder="Security Answer"
                required="true"
-               type="text" />
+               type="text"
+               [defaultValue]="callback?.payload?.input?.[1]?.value"/>
         <label [for]="callback?.payload?.input?.[1]?.name">Security Answer</label>
     </div>
 </div>

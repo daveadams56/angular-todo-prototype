@@ -63,9 +63,6 @@ export class TextComponent implements OnInit {
         case 'VALID_EMAIL_ADDRESS_FORMAT':
           validationFailures.push("Please use a valid email address");
           break;
-        case 'REQUIRED':
-          validationFailures.push("Please fill in this field");
-          break;
         default:
           break;
       }

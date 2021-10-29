@@ -15,7 +15,7 @@
         <div>
             <h1 class="text-center fs-2 mb-3" *ngIf="title">{{ title }}</h1>
             <div id="callbacks">
-                <form (ngSubmit)="nextStep(step)"
+                <form #callbackForm (ngSubmit)="nextStep(step)" ngNativeValidate
                       class="cstm_form">
                     <div
                          *ngFor="let callback of step?.callbacks"
