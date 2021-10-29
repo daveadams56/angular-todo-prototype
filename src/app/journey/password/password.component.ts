@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PasswordCallback } from '@forgerock/javascript-sdk/lib';
+import { PasswordCallback, ValidatedCreatePasswordCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-password',
@@ -8,18 +8,20 @@ import { PasswordCallback } from '@forgerock/javascript-sdk/lib';
 })
 export class PasswordComponent implements OnInit {
 
-  @Input() callback?: PasswordCallback
+  @Input() callback?: PasswordCallback | ValidatedCreatePasswordCallback;
   @Input() name?: string
   @Output() updatedCallback = new EventEmitter<string>();
 
   isVisible: boolean = false;
-  // TODO make this reactive to policy requirements
   isRequired: boolean = false;
-  stringAttributeName: string = "text"
+
+  failureMessages: string[] = []
 
   constructor() { }
 
   ngOnInit(): void {
+    this.isRequired = this.getIsRequired(this.callback);
+    this.failureMessages = this.evaluateFailedPolicies(this.callback);
   }
 
   updateValue(event: any): void {
@@ -28,6 +30,50 @@ export class PasswordComponent implements OnInit {
 
   toggleVisibility(): void {
     this.isVisible = !this.isVisible;
+  }
+
+  getIsRequired(callback?: PasswordCallback | ValidatedCreatePasswordCallback): boolean {
+
+    if (callback === undefined || callback instanceof PasswordCallback) return false;
+
+    const policies = callback.getPolicies();
+
+    if (policies.policyRequirements) {
+      return policies.policyRequirements.includes('REQUIRED');
+    } else if (callback?.isRequired) {
+      return callback.isRequired();
+    }
+
+    return false;
+  }
+
+  evaluateFailedPolicies(callback?: PasswordCallback | ValidatedCreatePasswordCallback): string[] {
+    if (callback === undefined || callback instanceof PasswordCallback) return [];
+
+    const failedPolicies = callback.getFailedPolicies();
+
+    const validationFailures: string[] = [];
+
+    console.log(failedPolicies)
+
+    failedPolicies.forEach(policy => {
+      const policyObj = JSON.parse(JSON.parse(JSON.stringify(policy)))
+
+      console.log(policyObj.policyRequirement)
+
+      switch (policyObj.policyRequirement) {
+
+        case 'LENGTH_BASED':
+          validationFailures.push(`Ensure password contains more than ${policyObj.params['min-password-length']} characters. `);
+          break;
+        case 'CHARACTER_SET':
+          validationFailures.push(`Ensure password contains 1 of each: capital letter, number and special character. `);
+          break;
+        default:
+          break;
+      }
+    });
+    return validationFailures;
   }
 
 }

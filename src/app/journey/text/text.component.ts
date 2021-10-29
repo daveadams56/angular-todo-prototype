@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AttributeInputCallback, NameCallback, ValidatedCreateUsernameCallback } from '@forgerock/javascript-sdk/lib';
+import { AttributeInputCallback, NameCallback, PolicyRequirement, ValidatedCreateUsernameCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-text',
@@ -12,18 +12,66 @@ export class TextComponent implements OnInit {
   @Input() name?: string
   @Output() updatedCallback = new EventEmitter<string>();
 
-  // TODO make this reactive to policy requirements
   isRequired: boolean = false;
+
+  // TODO adapt input type based on callback type
   stringAttributeName: string = "text"
+
+  failureMessages: string[] = []
 
   constructor() {
   }
 
   ngOnInit(): void {
+    this.isRequired = this.getIsRequired(this.callback);
+    this.failureMessages = this.evaluateFailedPolicies(this.callback);
   }
 
   updateValue(event: any): void {
     this.updatedCallback.emit(event.target.value);
+  }
+
+  getIsRequired(callback?: NameCallback | ValidatedCreateUsernameCallback | AttributeInputCallback<string>): boolean {
+
+    if (callback === undefined || callback instanceof NameCallback || callback.getType() === "NameCallback") return false;
+    
+    const policies = callback.getPolicies();
+
+    if (policies.policyRequirements) {
+      return policies.policyRequirements.includes('REQUIRED');
+    } else if (callback?.isRequired) {
+      return callback.isRequired();
+    }
+
+    return false;
+  }
+
+  evaluateFailedPolicies(callback?: NameCallback | ValidatedCreateUsernameCallback | AttributeInputCallback<string>): string[] {
+    if (callback === undefined || callback instanceof NameCallback || callback.getType() === "NameCallback") return [];
+
+    const failedPolicies = callback.getFailedPolicies();
+
+    const validationFailures: string[] = [];
+
+    failedPolicies.forEach(policy => {
+      const policyObj = JSON.parse(JSON.parse(JSON.stringify(policy)))
+
+      switch (policyObj.policyRequirement) {
+
+        case 'VALID_USERNAME':
+          validationFailures.push("Please choose a different username");
+          break;
+        case 'VALID_EMAIL_ADDRESS_FORMAT':
+          validationFailures.push("Please use a valid email address");
+          break;
+        case 'REQUIRED':
+          validationFailures.push("Please fill in this field");
+          break;
+        default:
+          break;
+      }
+    });
+    return validationFailures;
   }
 
 }

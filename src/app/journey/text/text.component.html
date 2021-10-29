@@ -3,13 +3,18 @@
        <!-- TODO Put validation classes in input -->
        <input
               class="cstm_form-control form-control bg-transparent"
+              [ngClass]="{'is-invalid': failureMessages.length}"
               [id]="name"
               [name]="name"
               [placeholder]="callback?.getPrompt()"
-              [required]="isRequired ? 'required' : ''"
+              [attr.required]="isRequired || null"
               (input)="updateValue($event)"
-              [type]="stringAttributeName == 'mail' ? 'email' : 'text'" />
+              [type]="stringAttributeName == 'mail' ? 'email' : 'text'"
+              [defaultValue]="callback?.getInputValue()"/>
        <label
               [for]="name">{{callback?.getPrompt()}}</label>
-       <!-- TODO Put validation messages here -->
+
+       <div *ngIf="failureMessages" class="invalid-feedback">
+              <div *ngFor="let message of failureMessages">{{message}}</div>
+       </div>
 </div>
