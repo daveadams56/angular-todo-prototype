@@ -8,7 +8,7 @@ const envConfigFile = `export const environment = {
    JOURNEY_REGISTER: '${process.env.JOURNEY_REGISTER}',
    API_URL: '${process.env.API_URL}',
    APP_URL: '${process.env.APP_URL}',
-   production: '${process.env.production}'
+   production: '${process.env.production || false}'
 };
 `; console.log('The file `environment.ts` will be written with the following content: \n');
 console.log(envConfigFile); writeFile(targetPath, envConfigFile, function (err) {
