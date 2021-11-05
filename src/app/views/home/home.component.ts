@@ -1,7 +1,7 @@
 import { Token } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { TokenManager, UserManager, TokenStorage, FRUser } from '@forgerock/javascript-sdk';
-import { UserService } from '../user.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-home',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Todo } from './todo';
-import { environment } from '../environments/environment';
+import { Todo } from '../todo';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@forgerock/javascript-sdk';
 
 @Injectable({

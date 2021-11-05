@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { TodosComponent } from './todos/todos.component';
+import { HomeComponent } from './views/home/home.component';
+import { LoginComponent } from './views/login/login.component';
+import { TodosComponent } from './views/todos/todos.component';
 import { AuthGuard } from './auth/auth.guard';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './views/register/register.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },

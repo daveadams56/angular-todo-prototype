@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FRUser } from '@forgerock/javascript-sdk';
 import { Router } from '@angular/router';
-import { UserService } from '../user.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-logout',
@@ -12,7 +12,7 @@ export class LogoutComponent implements OnInit {
 
   constructor(private router: Router, public userService: UserService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
   }
 
   logout() {
