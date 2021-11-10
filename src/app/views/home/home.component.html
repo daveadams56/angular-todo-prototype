@@ -1,8 +1,6 @@
 <app-header></app-header>
 <div class="cstm_container container-fluid ">
 
-    <!-- <ng-container [ngTemplateOutlet]="userService.info ? personalisedWelcome : genericWelcome"> -->
-
     <div *ngIf="userService.info">
 
         <div class="cstm_container container-fluid" *ngIf="userService.info">
@@ -11,7 +9,7 @@
                role="alert">
                 <app-verified-icon size="36px"></app-verified-icon>
                 <span class="ps-2">
-                    Welcome back, {{userService.info.given_name}}
+                    Welcome back, {{userService.info.name}}!
                     <a class="cstm_verified-alert-link" [routerLink]="'/todos'">
                         Manage your todos here
                     </a>
@@ -20,19 +18,19 @@
         </div>
     </div>
 
-    <div #main>
+    <div class="cstm_container container-fluid">
         <h1 class="cstm_head-text text-center">
             Protect with ForgeRock; Develop with Angular
         </h1>
 
         <p
-           class="cstm_subhead-text fs-3 mb-4 fw-bold">
+           class="cstm_subhead-text fs-3 mb-4 fw-bold text-muted">
             Learn how to develop ForgeRock protected, web apps with the
             <a
-               href="https://reactjs.org/">
-                React.js
+               href="https://angular.io/">
+                Angular
             </a>
-            library and our
+            framework and our
             <a
                href="https://github.com/ForgeRock/forgerock-javascript-sdk">
                 JavaScript SDK

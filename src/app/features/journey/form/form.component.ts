@@ -61,7 +61,7 @@ export class FormComponent implements OnInit {
         this.userService.info = info;
         this.userService.isAuthenticated = true;
 
-        this.router.navigateByUrl('/todos');
+        this.router.navigateByUrl('/');
       });
     }).catch(console.error);
   }
