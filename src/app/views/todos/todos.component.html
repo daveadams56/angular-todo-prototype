@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="text-center w-50 m-auto">
 
     <h1 class="mt-5 ">Your Todos</h1>
@@ -6,13 +7,13 @@
     <hr>
 
     <div class="card shadow-sm mb-5 ">
-        <form (ngSubmit)="createTodo()" #newTodoForm="ngForm" class="p-3 d-flex">
+        <form (ngSubmit)="createTodo()" #newTodoForm="ngForm" class="p-3 d-flex" ngNativeValidate>
             <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
                 <input id="newTodo" type="text" class="cstm_form-control form-control bg-transparent"
                        placeholder="What needs doing?" required="" [(ngModel)]="newTodo.title" name="title">
                 <label for="newTodo">What needs doing?</label>
             </div>
-            <button type="submit" class="btn btn-primary ms-2" [disabled]="!newTodoForm.form.valid">Create</button>
+            <button type="submit" class="btn btn-primary ms-2">Create</button>
         </form>
 
         <ng-container [ngTemplateOutlet]="todos.length > 0 ? todolist : empty">
@@ -42,3 +43,4 @@
     </div>
 
 </div>
+<app-footer></app-footer>

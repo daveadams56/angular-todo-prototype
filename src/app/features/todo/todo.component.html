@@ -1,18 +1,3 @@
-<!-- <div class="row" *ngIf="todo">
-    <div class="col-6">
-        <input [id]="todo._id" class="cstm_form-check form-check-input visually-hidden" type="checkbox" />
-        <label [ngClass]="{'cstm_todo-label_complete': todo.completed}">
-            {{todo.title}}
-        </label>
-
-    </div>
-
-    <div class="col-6">
-        <button class="btn btn-sm btn-secondary float-right ml-auto" (click)="completeTodo(todo)">Complete</button>
-    </div>
-</div> -->
-
-
 <li *ngIf="todo"
     class="cstm_todo-item list-group-item list-group-item-action d-flex p-0">
     <div class="flex-grow-1">
@@ -21,8 +6,7 @@
                class="cstm_form-check form-check-input visually-hidden"
                type="checkbox"
                [checked]="todo.completed"
-               (change)="completeTodo(todo)"
-        />
+               (change)="completeTodo(todo)" />
         <label [for]="todo._id" class={todoClasses}>
             <app-todo-icon [completed]="todo.completed" [size]="'36px'"></app-todo-icon>
             {{todo.title}}
@@ -39,19 +23,21 @@
             <app-action-icon></app-action-icon>
         </button>
         <ul
-            class="dropdown-menu dropdown-menu-end shadow-sm show"
+            class="dropdown-menu dropdown-menu-end shadow-sm"
             aria-labelledby="'todo_action_' + todo._id">
             <li>
                 <button
                         class="dropdown-item"
-                        (click)="setSelectedEditTodo(todo)">
+                        data-bs-toggle="modal"
+                        data-bs-target="#editModal">
                     Edit
                 </button>
             </li>
             <li>
                 <button
                         class="dropdown-item"
-                        (click)="setSelectedDeleteTodo(todo)">
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal">
                     Delete
                 </button>
             </li>
@@ -59,14 +45,13 @@
     </div>
 </li>
 
-<div *ngIf="todo && edit"
-     class="modal fade show"
+<div *ngIf="todo"
+     class="modal fade"
      data-bs-backdrop="static"
      id="editModal"
      tabIndex="-1"
      aria-modal="true"
-     role="dialog"
-     style="display: block;">
+     role="dialog">
     <div class="modal-dialog">
         <div
              class="modal-content">
@@ -75,7 +60,7 @@
                     Edit Todo
                 </h4>
             </div>
-            <form class="modal-body" (ngSubmit)="updateTodo(todo)" ngNativeValidate>
+            <form class="modal-body" (ngSubmit)="updateTodo(todo)">
                 <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
                     <input
                            id="editTodo"
@@ -93,8 +78,7 @@
                         type="button"
                         data-bs-toggle="modal"
                         data-bs-target="#editModal"
-                        class="btn btn-secondary"
-                        (click)="edit = false">
+                        class="btn btn-secondary">
                     Close
                 </button>
                 <button
@@ -102,8 +86,7 @@
                         data-bs-toggle="modal"
                         data-bs-target="#editModal"
                         class="btn btn-primary"
-                        (click)="updateTodo(todo)"
-                    >
+                        (click)="updateTodo(todo)">
                     Update Todo
                 </button>
             </div>
@@ -111,14 +94,13 @@
     </div>
 </div>
 
-<div *ngIf="todo && delete"
-     class="modal fade show"
+<div *ngIf="todo"
+     class="modal fade"
      data-bs-backdrop="static"
      id="deleteModal"
      tabIndex="-1"
      aria-modal="true"
-     role="dialog"
-     style="display: block;">
+     role="dialog">
     <div class="modal-dialog">
         <div
              class="modal-content">
@@ -130,8 +112,7 @@
                         type="button"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteModal"
-                        class="btn btn-secondary"
-                        (click)="delete = false">
+                        class="btn btn-secondary">
                     Close
                 </button>
                 <button

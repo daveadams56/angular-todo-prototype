@@ -12,9 +12,6 @@ export class TodoComponent implements OnInit {
   @Input() todo?: Todo
   @Output() updated = new EventEmitter<Todo>();
   @Output() deleted = new EventEmitter<boolean>();
-  
-  edit: boolean = false;
-  delete: boolean = false;
 
   constructor(private todoService: TodoService) { }
 
@@ -33,7 +30,6 @@ export class TodoComponent implements OnInit {
   updateTodo(todo: Todo): void {
     this.todoService.updateTodo(todo).then(response => {
       response.json().then((json) => {
-        this.edit = false;
         this.updated.emit(todo);
       });
     });
@@ -41,16 +37,7 @@ export class TodoComponent implements OnInit {
 
   deleteTodo(todo: Todo): void {
     this.todoService.deleteTodo(todo).then(response => {
-      this.delete = false;
       this.deleted.emit(true);
     });
-  }
-  
-  setSelectedEditTodo(todo: Todo): void {
-    this.edit = true;
-  }
-
-  setSelectedDeleteTodo(todo: Todo): void {
-    this.delete = true;
   }
 }
