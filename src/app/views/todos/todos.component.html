@@ -7,7 +7,7 @@
     <hr>
 
     <div class="card shadow-sm mb-5 ">
-        <form (ngSubmit)="createTodo()" #newTodoForm="ngForm" class="p-3 d-flex" ngNativeValidate>
+        <form (ngSubmit)="create(newTodo)" #newTodoForm="ngForm" class="p-3 d-flex" ngNativeValidate>
             <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
                 <input id="newTodo" type="text" class="cstm_form-control form-control bg-transparent"
                        placeholder="What needs doing?" required="" [(ngModel)]="newTodo.title" name="title">
@@ -21,9 +21,92 @@
             <ng-template #todolist>
                 <ul>
                     <li class="cstm_todo-item list-group-item list-group-item-action p-0" *ngFor="let todo of todos">
-                        <app-todo [todo]="todo" (updated)="getTodos()" (deleted)="getTodos()"></app-todo>
+                        <app-todo [todo]="todo" (complete)="complete(todo)" (edit)="setEditTodo(todo)" (delete)="setDeleteTodo(todo)"></app-todo>
                     </li>
                 </ul>
+
+                <div 
+                     class="modal fade"
+                     data-bs-backdrop="static"
+                     id="editModal"
+                     tabIndex="-1"
+                     aria-modal="true"
+                     role="dialog">
+                    <div class="modal-dialog">
+                        <div
+                             class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">
+                                    Edit Todo
+                                </h4>
+                            </div>
+                            <form class="modal-body" (ngSubmit)="update(editTodo)" *ngIf="editTodo">
+                                <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
+                                    <input
+                                           id="editTodo"
+                                           type="text"
+                                           class="cstm_form-control form-control bg-transparent"
+                                           [defaultValue]="editTodo.title"
+                                           [(ngModel)]="editTodo.title"
+                                           required="required" />
+                                    <label htmlFor="newTodo">Update todo text</label>
+                                </div>
+                            </form>
+                            <div class="modal-footer" *ngIf="editTodo">
+                                <button
+                                        id="closeEditModalBtn"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal"
+                                        class="btn btn-secondary">
+                                    Close
+                                </button>
+                                <button
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal"
+                                        class="btn btn-primary"
+                                        (click)="update(editTodo)">
+                                    Update Todo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div 
+                     class="modal fade"
+                     data-bs-backdrop="static"
+                     id="deleteModal"
+                     tabIndex="-1"
+                     aria-modal="true"
+                     role="dialog">
+                    <div class="modal-dialog" >
+                        <div
+                             class="modal-content">
+                            <div class="modal-body pt-4 px-4">
+                                <p>Are you sure you want to delete this todo?</p>
+                            </div>
+                            <div class="modal-footer p-3">
+                                <button
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        class="btn btn-secondary">
+                                    Close
+                                </button>
+                                <button *ngIf="deleteTodo"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        class="btn btn-danger"
+                                        (click)="delete(deleteTodo)">
+                                    Delete Todo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </ng-template>
 
             <ng-template #empty>

@@ -11,11 +11,27 @@ export class TodosComponent implements OnInit {
 
   todos: Todo[] = [];
   newTodo: Todo = { _id: "", title: "", completed: false };
+  editTodo?: Todo;
+  deleteTodo?: Todo;
 
   constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
-    this.resetNewTodo();
+    this.getTodos();
+  }
+
+  setEditTodo(todo: Todo): void {
+    this.editTodo = todo;
+  }
+
+  setDeleteTodo(todo: Todo): void {
+    this.deleteTodo = todo;
+  }
+
+  resetTodos(): void {
+    this.editTodo = undefined;
+    this.deleteTodo = undefined;
+    this.newTodo = { _id: "", title: "", completed: false };
     this.getTodos();
   }
 
@@ -27,17 +43,33 @@ export class TodosComponent implements OnInit {
     });
   }
 
-  createTodo(): void {
-    this.todoService.createTodo(this.newTodo).then(response => {
-      this.resetNewTodo();
-
+  create(todo: Todo): void {
+    this.todoService.createTodo(todo).then(response => {
       response.json().then((json) => {
-        this.getTodos();
+        this.resetTodos();
       });
     });
   }
 
-  resetNewTodo(): void {
-    this.newTodo = { _id: "", title: "", completed: false };
+  complete(todo: Todo): void {
+    this.todoService.completeTodo(todo).then(response => {
+      response.json().then((json) => {
+        this.resetTodos();
+      });
+    });
+  }
+
+  update(todo: Todo): void {
+    this.todoService.updateTodo(todo).then(response => {
+      response.json().then((json) => {
+        this.resetTodos();
+      });
+    });
+  }
+
+  delete(todo: Todo): void {
+    this.todoService.deleteTodo(todo).then(response => {
+      this.resetTodos();
+    });
   }
 }

@@ -10,8 +10,9 @@ import { TodoService } from '../../services/todo.service';
 export class TodoComponent implements OnInit {
 
   @Input() todo?: Todo
-  @Output() updated = new EventEmitter<Todo>();
-  @Output() deleted = new EventEmitter<boolean>();
+  @Output() complete = new EventEmitter<Todo>();
+  @Output() edit = new EventEmitter<Todo>();
+  @Output() delete = new EventEmitter<Todo>();
 
   constructor(private todoService: TodoService) { }
 
@@ -19,25 +20,15 @@ export class TodoComponent implements OnInit {
     
   }
 
-  completeTodo(todo: Todo): void {
-    this.todoService.completeTodo(todo).then(response => {
-      response.json().then((json) => {
-        this.updated.emit(todo);
-      });
-    });
+  setComplete(todo: Todo): void {
+    this.complete.emit(todo);
   }
 
-  updateTodo(todo: Todo): void {
-    this.todoService.updateTodo(todo).then(response => {
-      response.json().then((json) => {
-        this.updated.emit(todo);
-      });
-    });
+  setEdit(todo: Todo): void {
+    this.edit.emit(todo);
   }
 
-  deleteTodo(todo: Todo): void {
-    this.todoService.deleteTodo(todo).then(response => {
-      this.deleted.emit(true);
-    });
+  setDelete(todo: Todo): void {
+    this.delete.emit(todo);
   }
 }

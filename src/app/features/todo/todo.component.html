@@ -6,7 +6,7 @@
                class="cstm_form-check form-check-input visually-hidden"
                type="checkbox"
                [checked]="todo.completed"
-               (change)="completeTodo(todo)" />
+               (change)="setComplete(todo)" />
         <label [for]="todo._id" class={todoClasses}>
             <app-todo-icon [completed]="todo.completed" [size]="'36px'"></app-todo-icon>
             {{todo.title}}
@@ -29,7 +29,8 @@
                 <button
                         class="dropdown-item"
                         data-bs-toggle="modal"
-                        data-bs-target="#editModal">
+                        data-bs-target="#editModal"
+                        (click)="setEdit(todo)">
                     Edit
                 </button>
             </li>
@@ -37,93 +38,11 @@
                 <button
                         class="dropdown-item"
                         data-bs-toggle="modal"
-                        data-bs-target="#deleteModal">
+                        data-bs-target="#deleteModal"
+                        (click)="setDelete(todo)">
                     Delete
                 </button>
             </li>
         </ul>
     </div>
 </li>
-
-<div *ngIf="todo"
-     class="modal fade"
-     data-bs-backdrop="static"
-     id="editModal"
-     tabIndex="-1"
-     aria-modal="true"
-     role="dialog">
-    <div class="modal-dialog">
-        <div
-             class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">
-                    Edit Todo
-                </h4>
-            </div>
-            <form class="modal-body" (ngSubmit)="updateTodo(todo)">
-                <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
-                    <input
-                           id="editTodo"
-                           type="text"
-                           class="cstm_form-control form-control bg-transparent"
-                           [defaultValue]="todo.title"
-                           [(ngModel)]="todo.title"
-                           required="required" />
-                    <label htmlFor="newTodo">Update todo text</label>
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button
-                        id="closeEditModalBtn"
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editModal"
-                        class="btn btn-secondary">
-                    Close
-                </button>
-                <button
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editModal"
-                        class="btn btn-primary"
-                        (click)="updateTodo(todo)">
-                    Update Todo
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div *ngIf="todo"
-     class="modal fade"
-     data-bs-backdrop="static"
-     id="deleteModal"
-     tabIndex="-1"
-     aria-modal="true"
-     role="dialog">
-    <div class="modal-dialog">
-        <div
-             class="modal-content">
-            <div class="modal-body pt-4 px-4">
-                <p>Are you sure you want to delete this todo?</p>
-            </div>
-            <div class="modal-footer p-3">
-                <button
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteModal"
-                        class="btn btn-secondary">
-                    Close
-                </button>
-                <button
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteModal"
-                        class="btn btn-danger"
-                        (click)="deleteTodo(todo)">
-                    Delete Todo
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
