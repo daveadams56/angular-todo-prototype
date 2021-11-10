@@ -30,6 +30,14 @@ import { TermsConditionsComponent } from './features/journey/terms-conditions/te
 import { KbaComponent } from './features/journey/kba/kba.component';
 import { LockIconComponent } from './icons/lock-icon/lock-icon.component';
 import { NewUserIconComponent } from './icons/new-user-icon/new-user-icon.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { AngularIconComponent } from './icons/angular-icon/angular-icon.component';
+import { ForgerockIconComponent } from './icons/forgerock-icon/forgerock-icon.component';
+import { TodosIconComponent } from './icons/todos-icon/todos-icon.component';
+import { AccountIconComponent } from './icons/account-icon/account-icon.component';
+import { TodoIconComponent } from './icons/todo-icon/todo-icon.component';
+import { ActionIconComponent } from './icons/action-icon/action-icon.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +66,15 @@ import { NewUserIconComponent } from './icons/new-user-icon/new-user-icon.compon
     TermsConditionsComponent,
     KbaComponent,
     LockIconComponent,
-    NewUserIconComponent
+    NewUserIconComponent,
+    HeaderComponent,
+    FooterComponent,
+    AngularIconComponent,
+    ForgerockIconComponent,
+    TodosIconComponent,
+    AccountIconComponent,
+    TodoIconComponent,
+    ActionIconComponent
   ],
   imports: [
     BrowserModule,

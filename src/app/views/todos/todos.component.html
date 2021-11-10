@@ -20,15 +20,9 @@
             <ng-template #todolist>
                 <ul>
                     <li class="cstm_todo-item list-group-item list-group-item-action p-0" *ngFor="let todo of todos">
-                        <app-todo [todo]="todo" (updated)="getTodos()"></app-todo>
+                        <app-todo [todo]="todo" (updated)="getTodos()" (deleted)="getTodos()"></app-todo>
                     </li>
                 </ul>
-
-                <!-- <ul class="list-group list-group-flush mb-1">
-                <app-todo *ngFor="let todo of todos" todo?="todo"></app-todo>
-            </ul> -->
-
-                <!-- <app-todo *ngFor="let todo of todos" todo?="todo"></app-todo> -->
             </ng-template>
 
             <ng-template #empty>

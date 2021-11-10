@@ -53,4 +53,30 @@ export class TodoService {
     });
   }
 
+  updateTodo(todo: Todo): Promise<Response> {
+    
+    return HttpClient.request({
+      url: `${environment.API_URL}/todos/${todo._id}`,
+      init: {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(todo),
+        method: "POST"
+      },
+      timeout: 5000
+    });
+  }
+
+  deleteTodo(todo: Todo): Promise<Response> {
+    
+    return HttpClient.request({
+      url: `${environment.API_URL}/todos/${todo._id}`,
+      init: {
+        method: "DELETE"
+      },
+      timeout: 5000
+    });
+  }
+
 }
