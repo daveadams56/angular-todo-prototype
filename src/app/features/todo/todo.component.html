@@ -7,7 +7,7 @@
                type="checkbox"
                [checked]="todo.completed"
                (change)="setComplete(todo)" />
-        <label [for]="todo._id" class={todoClasses}>
+        <label [for]="todo._id" class="cstm_todo-label col d-flex align-items-center fs-5 w-100 p-3" [ngClass]="{'cstm_todo-label_incomplete': !todo.completed, 'cstm_todo-label_complete': todo.completed}">
             <app-todo-icon [completed]="todo.completed" [size]="'36px'"></app-todo-icon>
             {{todo.title}}
         </label>
