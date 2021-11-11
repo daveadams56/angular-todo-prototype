@@ -13,6 +13,8 @@ export class UserService {
 
   refreshUserAuthentication(): void {
 
+    // TODO rework this to simplify and return a promise or observable
+
     UserManager.getCurrentUser().then((info) => {
       // Assume user is likely authenticated if there are tokens
       this.isAuthenticated = true;

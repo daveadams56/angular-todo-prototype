@@ -17,8 +17,6 @@ export class PasswordComponent implements OnInit {
 
   failureMessages: string[] = []
 
-  constructor() { }
-
   ngOnInit(): void {
     this.isRequired = this.getIsRequired(this.callback);
     this.failureMessages = this.evaluateFailedPolicies(this.callback);

@@ -1,17 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-todos-icon',
   templateUrl: './todos-icon.component.html',
   styleUrls: ['./todos-icon.component.scss']
 })
-export class TodosIconComponent implements OnInit {
+export class TodosIconComponent {
 
   @Input() size: string = "24px";
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

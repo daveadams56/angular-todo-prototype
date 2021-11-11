@@ -6,16 +6,11 @@ import { AttributeInputCallback } from '@forgerock/javascript-sdk/lib';
   templateUrl: './boolean.component.html',
   styleUrls: ['./boolean.component.scss']
 })
-export class BooleanComponent implements OnInit {
+export class BooleanComponent {
 
   @Input() callback?: AttributeInputCallback<boolean>
   @Input() name?: string
   @Output() updatedCallback = new EventEmitter<boolean>();
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   updateValue(event: any): void {
     this.updatedCallback.emit(event.currentTarget.checked);

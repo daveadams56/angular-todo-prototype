@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FRAuth, FRStep, FRLoginFailure, FRLoginSuccess, FRUser, TokenManager, UserManager } from '@forgerock/javascript-sdk'
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -8,10 +7,8 @@ import { UserService } from '../../services/user.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   constructor(private router: Router, public userService: UserService) { }
 
-  ngOnInit(): void {
-  }
 }

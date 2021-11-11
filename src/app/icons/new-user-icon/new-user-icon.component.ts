@@ -1,17 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-new-user-icon',
   templateUrl: './new-user-icon.component.html',
   styleUrls: ['./new-user-icon.component.scss']
 })
-export class NewUserIconComponent implements OnInit {
+export class NewUserIconComponent {
 
   @Input() size: string = "24px";
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

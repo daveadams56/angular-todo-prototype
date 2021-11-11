@@ -19,9 +19,6 @@ export class TextComponent implements OnInit {
 
   failureMessages: string[] = []
 
-  constructor() {
-  }
-
   ngOnInit(): void {
     this.isRequired = this.getIsRequired(this.callback);
     console.log(this.callback?.getPrompt() + " " + this.isRequired)

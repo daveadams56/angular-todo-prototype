@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FRCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
@@ -6,13 +6,7 @@ import { FRCallback } from '@forgerock/javascript-sdk/lib';
   templateUrl: './unknown.component.html',
   styleUrls: ['./unknown.component.scss']
 })
-export class UnknownComponent implements OnInit {
+export class UnknownComponent {
 
   @Input() callback?: FRCallback
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

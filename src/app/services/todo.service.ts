@@ -8,8 +8,6 @@ import { HttpClient } from '@forgerock/javascript-sdk';
 })
 export class TodoService {
 
-  constructor() { }
-
   getTodos(): Promise<Response> {
     return HttpClient.request({
       url: `${environment.API_URL}/todos`,

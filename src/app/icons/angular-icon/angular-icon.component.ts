@@ -1,17 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-angular-icon',
   templateUrl: './angular-icon.component.html',
   styleUrls: ['./angular-icon.component.scss']
 })
-export class AngularIconComponent implements OnInit {
+export class AngularIconComponent {
 
   @Input() size: string = "24px";
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }
