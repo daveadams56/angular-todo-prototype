@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-left-arrow-icon',
-  templateUrl: './left-arrow-icon.component.html',
-  styleUrls: ['./left-arrow-icon.component.scss']
+  templateUrl: './left-arrow-icon.component.html'
 })
 export class LeftArrowIconComponent {
 

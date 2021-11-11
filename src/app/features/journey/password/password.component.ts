@@ -3,8 +3,7 @@ import { PasswordCallback, ValidatedCreatePasswordCallback } from '@forgerock/ja
 
 @Component({
   selector: 'app-password',
-  templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss']
+  templateUrl: './password.component.html'
 })
 export class PasswordComponent implements OnInit {
 

@@ -3,8 +3,7 @@ import { TermsAndConditionsCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-terms-conditions',
-  templateUrl: './terms-conditions.component.html',
-  styleUrls: ['./terms-conditions.component.scss']
+  templateUrl: './terms-conditions.component.html'
 })
 export class TermsConditionsComponent {
 

@@ -3,8 +3,7 @@ import { KbaCreateCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-kba',
-  templateUrl: './kba.component.html',
-  styleUrls: ['./kba.component.scss']
+  templateUrl: './kba.component.html'
 })
 export class KbaComponent {
 

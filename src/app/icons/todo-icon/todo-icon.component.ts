@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-todo-icon',
-  templateUrl: './todo-icon.component.html',
-  styleUrls: ['./todo-icon.component.scss']
+  templateUrl: './todo-icon.component.html'
 })
 export class TodoIconComponent {
 

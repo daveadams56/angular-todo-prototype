@@ -3,8 +3,7 @@ import { FRCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-unknown',
-  templateUrl: './unknown.component.html',
-  styleUrls: ['./unknown.component.scss']
+  templateUrl: './unknown.component.html'
 })
 export class UnknownComponent {
 

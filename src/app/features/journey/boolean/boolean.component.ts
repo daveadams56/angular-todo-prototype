@@ -3,8 +3,7 @@ import { AttributeInputCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-boolean',
-  templateUrl: './boolean.component.html',
-  styleUrls: ['./boolean.component.scss']
+  templateUrl: './boolean.component.html'
 })
 export class BooleanComponent {
 

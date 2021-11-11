@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-alert-icon',
-  templateUrl: './alert-icon.component.html',
-  styleUrls: ['./alert-icon.component.scss']
+  templateUrl: './alert-icon.component.html'
 })
 export class AlertIconComponent {
 

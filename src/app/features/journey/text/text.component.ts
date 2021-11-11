@@ -3,8 +3,7 @@ import { AttributeInputCallback, NameCallback, PolicyRequirement, ValidatedCreat
 
 @Component({
   selector: 'app-text',
-  templateUrl: './text.component.html',
-  styleUrls: ['./text.component.scss']
+  templateUrl: './text.component.html'
 })
 export class TextComponent implements OnInit {
 

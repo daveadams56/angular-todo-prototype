@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-verified-icon',
-  templateUrl: './verified-icon.component.html',
-  styleUrls: ['./verified-icon.component.scss']
+  templateUrl: './verified-icon.component.html'
 })
 export class VerifiedIconComponent {
 

@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-todos-icon',
-  templateUrl: './todos-icon.component.html',
-  styleUrls: ['./todos-icon.component.scss']
+  templateUrl: './todos-icon.component.html'
 })
 export class TodosIconComponent {
 

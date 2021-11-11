@@ -6,8 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss']
+  templateUrl: './form.component.html'
 })
 export class FormComponent implements OnInit {
 
