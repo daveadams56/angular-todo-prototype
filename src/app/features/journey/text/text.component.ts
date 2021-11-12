@@ -20,7 +20,6 @@ export class TextComponent implements OnInit {
 
   ngOnInit(): void {
     this.isRequired = this.getIsRequired(this.callback);
-    console.log(this.callback?.getPrompt() + " " + this.isRequired)
     this.failureMessages = this.evaluateFailedPolicies(this.callback);
   }
 

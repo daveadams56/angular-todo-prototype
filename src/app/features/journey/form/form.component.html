@@ -57,7 +57,7 @@
                             <app-kba *ngSwitchCase="'KbaCreateCallback'"
                                      [callback]="$any(callback)"
                                      [name]="callback?.payload?.input?.[0]?.name"
-                                     (setQuestion)="$any(callback).setQuestion($event)"=(setAnswer)="$any(callback).setAnswer($event)"></app-kba>
+                                     (setQuestion)="$any(callback).setQuestion($event)" (setAnswer)="$any(callback).setAnswer($event)"></app-kba>
 
                             <app-unknown *ngSwitchDefault [callback]="callback"></app-unknown>
                         </container-element>
