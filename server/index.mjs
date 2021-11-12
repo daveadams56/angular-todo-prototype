@@ -1,5 +1,5 @@
 /*
- * forgerock-sample-web-react
+ * angular-todo
  *
  * index.mjs
  *
