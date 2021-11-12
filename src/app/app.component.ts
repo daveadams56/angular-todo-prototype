@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Config } from '@forgerock/javascript-sdk'
+import { Config, UserManager } from '@forgerock/javascript-sdk'
 import { environment } from '../environments/environment';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,9 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   title = 'angular-todo-prototype';
 
-  ngOnInit(): void {
+  constructor(public userService: UserService) { }
+
+  async ngOnInit(): Promise<void> {
     Config.set({
       clientId: environment.WEB_OAUTH_CLIENT,
       redirectUri: environment.APP_URL,
@@ -21,5 +24,15 @@ export class AppComponent {
       realmPath: environment.REALM_PATH,
       tree: environment.JOURNEY_LOGIN
     });
+
+    try {
+      // Assume user is likely authenticated if there are tokens
+      let info = await UserManager.getCurrentUser();
+      this.userService.isAuthenticated = true;
+      this.userService.info = info;
+    } catch (err) {
+      // User likely not authenticated
+      console.log(err);
+    }
   }
 }

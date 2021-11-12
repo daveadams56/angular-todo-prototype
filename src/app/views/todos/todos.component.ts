@@ -34,41 +34,49 @@ export class TodosComponent implements OnInit {
     this.getTodos();
   }
 
-  getTodos(): void {
-    this.todoService.getTodos().then(response => {
-      response.json().then(json => {
-        this.todos = json as Todo[];
-      })
-    });
+  async getTodos(): Promise<void> {
+    try {
+      let todos = await this.todoService.getTodos();
+      let json = await todos.json();
+      this.todos = json as Todo[];
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  create(todo: Todo): void {
-    this.todoService.createTodo(todo).then(response => {
-      response.json().then((json) => {
-        this.resetTodos();
-      });
-    });
-  }
-
-  complete(todo: Todo): void {
-    this.todoService.completeTodo(todo).then(response => {
-      response.json().then((json) => {
-        this.resetTodos();
-      });
-    });
-  }
-
-  update(todo: Todo): void {
-    this.todoService.updateTodo(todo).then(response => {
-      response.json().then((json) => {
-        this.resetTodos();
-      });
-    });
-  }
-
-  delete(todo: Todo): void {
-    this.todoService.deleteTodo(todo).then(response => {
+  async create(todo: Todo): Promise<void> {
+    try {
+      await this.todoService.createTodo(todo);
       this.resetTodos();
-    });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async complete(todo: Todo): Promise<void> {
+    try {
+      await this.todoService.completeTodo(todo);
+      this.resetTodos();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async update(todo: Todo): Promise<void> {
+    try {
+      await this.todoService.updateTodo(todo);
+      this.resetTodos();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async delete(todo: Todo): Promise<void> {
+    try {
+      await this.todoService.deleteTodo(todo);
+      this.resetTodos();
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

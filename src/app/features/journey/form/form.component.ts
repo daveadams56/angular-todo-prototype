@@ -27,42 +27,49 @@ export class FormComponent implements OnInit {
     this.nextStep();
   }
 
-  nextStep(step?: FRStep): void {
+  async nextStep(step?: FRStep): Promise<void> {
     this.submittingForm = true;
-    FRAuth.next(step, { tree: this.tree })
-      .then((step) => {
-        switch (step.type) {
-          case 'LoginFailure':
-            this.handleFailure(step);
-            break;
-          case 'LoginSuccess':
-            this.handleSuccess(step);
-            break;
-          case 'Step':
-            this.handleStep(step);
-            break;
-          default: this.handleFailure()
-        }
-      })
-      .catch(console.log)
-      .finally(() => this.submittingForm = false);
+
+    try {
+      let nextStep = await FRAuth.next(step, { tree: this.tree });
+
+      switch (nextStep.type) {
+        case 'LoginFailure':
+          this.handleFailure(nextStep);
+          break;
+        case 'LoginSuccess':
+          this.handleSuccess(nextStep);
+          break;
+        case 'Step':
+          this.handleStep(nextStep);
+          break;
+        default: this.handleFailure();
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.submittingForm = false
+    }
   }
 
   handleFailure(failure?: FRLoginFailure) {
     this.failure = failure;
   }
 
-  handleSuccess(success?: FRLoginSuccess) {
+  async handleSuccess(success?: FRLoginSuccess) {
     this.success = success;
 
-    TokenManager.getTokens({ forceRenew: true }).then(() => {
-      UserManager.getCurrentUser().then((info) => {
-        this.userService.info = info;
-        this.userService.isAuthenticated = true;
+    try {
+      await TokenManager.getTokens({ forceRenew: true });
 
-        this.router.navigateByUrl('/');
-      });
-    }).catch(console.error);
+      let info = await UserManager.getCurrentUser();
+      this.userService.info = info;
+      this.userService.isAuthenticated = true;
+
+      this.router.navigateByUrl('/');
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   handleStep(step?: FRStep) {

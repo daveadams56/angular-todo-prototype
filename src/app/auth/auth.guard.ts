@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { UserManager } from '@forgerock/javascript-sdk';
 
 @Injectable({
   providedIn: 'root'
@@ -11,18 +12,24 @@ export class AuthGuard implements CanActivate {
 
   }
 
-  canActivate(
+  async canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): true | UrlTree {
-    const url: string = state.url;
+    state: RouterStateSnapshot): Promise<true | UrlTree> {
 
-    return this.checkLogin(url);
+    if (this.userService.isAuthenticated) {
+      return true;
+    } else {
+      try {
+        // Assume user is likely authenticated if there are tokens
+        let info = await UserManager.getCurrentUser();
+        this.userService.isAuthenticated = true;
+        this.userService.info = info;
+        return true;
+      } catch (err) {
+        // User likely not authenticated
+        console.log(err);
+        return this.router.parseUrl('/login');
+      }
+    }
   }
-
-  checkLogin(url: string): true | UrlTree {
-    this.userService.refreshUserAuthentication();
-    if (this.userService.isAuthenticated) { return true; }
-    return this.router.parseUrl('/login');
-  }
-  
 }

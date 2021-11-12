@@ -15,14 +15,15 @@ export class LogoutComponent implements OnInit {
     this.logout();
   }
 
-  logout() {
-    FRUser.logout().then(() => {
+  async logout() {
+    try {
+      await FRUser.logout();
       this.userService.info = undefined;
       this.userService.isAuthenticated = false;
       setTimeout(() => this.redirectToHome(), 1000);
-    }).catch(err => {
+    } catch (err) {
       console.error(`Error: logout did not successfully complete; ${err}`);
-    });
+    }
   }
 
   redirectToHome() {
