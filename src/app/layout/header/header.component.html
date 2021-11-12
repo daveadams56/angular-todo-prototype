@@ -2,7 +2,8 @@
      class="navbar navbar-expand navbar-light bg-white py-0 border-bottom">
     <div class="cstm_container container-fluid d-flex align-items-stretch">
         <a [routerLink]="'/'"
-        class="cstm_navbar-brand cstm_navbar-brand_auth navbar-brand d-none d-sm-none d-md-block py-3 pe-4 me-4">
+        class="cstm_navbar-brand navbar-brand py-3 pe-4 me-4"
+         [ngClass]="{'cstm_navbar-brand_auth d-none d-sm-none d-md-block': userService.isAuthenticated}">
             <app-forgerock-icon size="31px"></app-forgerock-icon> +
             <app-angular-icon size="38px"></app-angular-icon>
         </a>
