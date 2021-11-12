@@ -18,10 +18,14 @@
 
             <ng-template #todolist>
                 <ul class="list-group list-group-flush mb-1">
-                    <app-todo *ngFor="let todo of todos" [todo]="todo" (complete)="complete(todo)" (edit)="setEditTodo(todo)" (delete)="setDeleteTodo(todo)"></app-todo>
+                    <app-todo *ngFor="let todo of todos"
+                              [todo]="todo"
+                              (complete)="complete(todo)"
+                              (edit)="setEditTodo(todo)"
+                              (delete)="setDeleteTodo(todo)"></app-todo>
                 </ul>
 
-                <div 
+                <div
                      class="modal fade"
                      data-bs-backdrop="static"
                      id="editModal"
@@ -69,15 +73,15 @@
                         </div>
                     </div>
                 </div>
-                
-                <div 
+
+                <div
                      class="modal fade"
                      data-bs-backdrop="static"
                      id="deleteModal"
                      tabIndex="-1"
                      aria-modal="true"
                      role="dialog">
-                    <div class="modal-dialog" >
+                    <div class="modal-dialog">
                         <div
                              class="modal-content">
                             <div class="modal-body pt-4 px-4">
@@ -110,7 +114,9 @@
                     <ul class="list-group list-group-flush mb-1 ">
                         <li class="cstm_todo-item list-group-item list-group-item-action p-0">
                             <div class="row">
-                                <p class="col d-flex align-items-center fs-5 text-muted w-100 ms-3 p-3">No todos yet. Create one above!</p>
+                                <p class="col d-flex align-items-center fs-5 text-muted w-100 ms-3 p-3">
+                                    No todos yet. Create one above!
+                                </p>
                             </div>
                         </li>
                     </ul>
