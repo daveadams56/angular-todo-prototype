@@ -70,7 +70,7 @@
         },
         "serve": {
           "options": {
-            "host": "app.example.com",
+            "host": "angular.example.com",
             "port": 8443,
             "ssl": true,
             "sslCert": "./example.com+5.pem",
