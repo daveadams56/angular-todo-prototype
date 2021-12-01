@@ -1,22 +1,29 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AttributeInputCallback, NameCallback, PolicyRequirement, ValidatedCreateUsernameCallback } from '@forgerock/javascript-sdk/lib';
+import {
+  AttributeInputCallback,
+  NameCallback,
+  PolicyRequirement,
+  ValidatedCreateUsernameCallback,
+} from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-text',
-  templateUrl: './text.component.html'
+  templateUrl: './text.component.html',
 })
 export class TextComponent implements OnInit {
-
-  @Input() callback?: NameCallback | ValidatedCreateUsernameCallback | AttributeInputCallback<string>
-  @Input() name?: string
+  @Input() callback?:
+    | NameCallback
+    | ValidatedCreateUsernameCallback
+    | AttributeInputCallback<string>;
+  @Input() name?: string;
   @Output() updatedCallback = new EventEmitter<string>();
 
   isRequired: boolean = false;
 
   // TODO adapt input type based on callback type
-  stringAttributeName: string = "text"
+  stringAttributeName: string = 'text';
 
-  failureMessages: string[] = []
+  failureMessages: string[] = [];
 
   ngOnInit(): void {
     this.isRequired = this.getIsRequired(this.callback);
@@ -27,36 +34,54 @@ export class TextComponent implements OnInit {
     this.updatedCallback.emit(event.target.value);
   }
 
-  getIsRequired(callback?: NameCallback | ValidatedCreateUsernameCallback | AttributeInputCallback<string>): boolean {
+  getIsRequired(
+    callback?:
+      | NameCallback
+      | ValidatedCreateUsernameCallback
+      | AttributeInputCallback<string>
+  ): boolean {
+    if (
+      callback === undefined ||
+      callback instanceof NameCallback ||
+      callback.getType() === 'NameCallback'
+    )
+      return false;
 
-    if (callback === undefined || callback instanceof NameCallback || callback.getType() === "NameCallback") return false;
-    
     const policies = callback.getPolicies();
 
-    if (callback.getType() === "ValidatedCreateUsernameCallback") {
+    if (callback.getType() === 'ValidatedCreateUsernameCallback') {
       return policies.policyRequirements.includes('REQUIRED');
     } else {
       return callback.isRequired();
     }
   }
 
-  evaluateFailedPolicies(callback?: NameCallback | ValidatedCreateUsernameCallback | AttributeInputCallback<string>): string[] {
-    if (callback === undefined || callback instanceof NameCallback || callback.getType() === "NameCallback") return [];
+  evaluateFailedPolicies(
+    callback?:
+      | NameCallback
+      | ValidatedCreateUsernameCallback
+      | AttributeInputCallback<string>
+  ): string[] {
+    if (
+      callback === undefined ||
+      callback instanceof NameCallback ||
+      callback.getType() === 'NameCallback'
+    )
+      return [];
 
     const failedPolicies = callback.getFailedPolicies();
 
     const validationFailures: string[] = [];
 
-    failedPolicies.forEach(policy => {
-      const policyObj = JSON.parse(JSON.parse(JSON.stringify(policy)))
+    failedPolicies.forEach((policy) => {
+      const policyObj = JSON.parse(JSON.parse(JSON.stringify(policy)));
 
       switch (policyObj.policyRequirement) {
-
         case 'VALID_USERNAME':
-          validationFailures.push("Please choose a different username");
+          validationFailures.push('Please choose a different username');
           break;
         case 'VALID_EMAIL_ADDRESS_FORMAT':
-          validationFailures.push("Please use a valid email address");
+          validationFailures.push('Please use a valid email address');
           break;
         default:
           break;
@@ -64,5 +89,4 @@ export class TextComponent implements OnInit {
     });
     return validationFailures;
   }
-
 }

@@ -1,18 +1,21 @@
 <container-element [ngSwitch]="type">
-    <p *ngSwitchCase="'error'"
-       class="alert alert-danger d-flex align-items-center mt-1"
-       role="alert">
-        <app-alert-icon></app-alert-icon>
-        <span class="ps-2">{{message}}</span>
-    </p>
-    <p *ngSwitchCase="'success'"
-       class="alert alert-success d-flex align-items-center mt-5"
-       role="alert">
-        <app-verified-icon size="36px"></app-verified-icon>
-        <span class="ps-2">{{message}}</span>
-    </p>
-    <p *ngSwitchDefault
-       class="alert d-flex align-items-center mt-5" role="alert">
-        <span class="ps-2">{{message}}</span>
-    </p>
+  <p
+    *ngSwitchCase="'error'"
+    class="alert alert-danger d-flex align-items-center mt-1"
+    role="alert"
+  >
+    <app-alert-icon></app-alert-icon>
+    <span class="ps-2">{{ message }}</span>
+  </p>
+  <p
+    *ngSwitchCase="'success'"
+    class="alert alert-success d-flex align-items-center mt-5"
+    role="alert"
+  >
+    <app-verified-icon size="36px"></app-verified-icon>
+    <span class="ps-2">{{ message }}</span>
+  </p>
+  <p *ngSwitchDefault class="alert d-flex align-items-center mt-5" role="alert">
+    <span class="ps-2">{{ message }}</span>
+  </p>
 </container-element>

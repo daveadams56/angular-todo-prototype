@@ -4,16 +4,15 @@ import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todos',
-  templateUrl: './todos.component.html'
+  templateUrl: './todos.component.html',
 })
 export class TodosComponent implements OnInit {
-
   todos: Todo[] = [];
-  newTodo: Todo = { _id: "", title: "", completed: false };
+  newTodo: Todo = { _id: '', title: '', completed: false };
   editTodo?: Todo;
   deleteTodo?: Todo;
 
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService) {}
 
   ngOnInit(): void {
     this.getTodos();
@@ -30,7 +29,7 @@ export class TodosComponent implements OnInit {
   resetTodos(): void {
     this.editTodo = undefined;
     this.deleteTodo = undefined;
-    this.newTodo = { _id: "", title: "", completed: false };
+    this.newTodo = { _id: '', title: '', completed: false };
     this.getTodos();
   }
 

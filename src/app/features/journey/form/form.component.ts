@@ -1,26 +1,33 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { FRAuth, FRLoginFailure, FRLoginSuccess, FRStep, TokenManager, UserManager, StepType } from '@forgerock/javascript-sdk';
+import {
+  FRAuth,
+  FRLoginFailure,
+  FRLoginSuccess,
+  FRStep,
+  TokenManager,
+  UserManager,
+  StepType,
+} from '@forgerock/javascript-sdk';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-form',
-  templateUrl: './form.component.html'
+  templateUrl: './form.component.html',
 })
 export class FormComponent implements OnInit {
-
-  @Input() action?: string
+  @Input() action?: string;
 
   step?: FRStep;
-  failure?: FRLoginFailure
-  success?: FRLoginSuccess
-  title?: string
-  buttonText?: string
-  submittingForm: boolean = false
-  tree?: string
+  failure?: FRLoginFailure;
+  success?: FRLoginSuccess;
+  title?: string;
+  buttonText?: string;
+  submittingForm: boolean = false;
+  tree?: string;
 
-  constructor(private router: Router, public userService: UserService) { }
+  constructor(private router: Router, public userService: UserService) {}
 
   ngOnInit(): void {
     this.setConfigForAction(this.action);
@@ -43,12 +50,13 @@ export class FormComponent implements OnInit {
         case 'Step':
           this.handleStep(nextStep);
           break;
-        default: this.handleFailure();
+        default:
+          this.handleFailure();
       }
     } catch (err) {
       console.log(err);
     } finally {
-      this.submittingForm = false
+      this.submittingForm = false;
     }
   }
 
@@ -85,21 +93,21 @@ export class FormComponent implements OnInit {
   setConfigForAction(action?: string) {
     switch (action) {
       case 'login': {
-        this.title = "Sign In";
-        this.buttonText = "Sign In";
+        this.title = 'Sign In';
+        this.buttonText = 'Sign In';
         this.tree = environment.JOURNEY_LOGIN;
         break;
       }
       case 'register': {
-        this.title = "Sign Up";
-        this.buttonText = "Register",
-        this.tree = environment.JOURNEY_REGISTER
+        this.title = 'Sign Up';
+        (this.buttonText = 'Register'),
+          (this.tree = environment.JOURNEY_REGISTER);
         break;
       }
       default: {
-        this.title = "Welcome";
-        this.buttonText = "Next"
-        this.tree = environment.JOURNEY_LOGIN
+        this.title = 'Welcome';
+        this.buttonText = 'Next';
+        this.tree = environment.JOURNEY_LOGIN;
         break;
       }
     }

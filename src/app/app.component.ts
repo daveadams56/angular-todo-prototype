@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { Config, UserManager } from '@forgerock/javascript-sdk'
+import { Config, UserManager } from '@forgerock/javascript-sdk';
 import { environment } from '../environments/environment';
 import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'angular-todo-prototype';
 
-  constructor(public userService: UserService) { }
+  constructor(public userService: UserService) {}
 
   async ngOnInit(): Promise<void> {
     Config.set({
       clientId: environment.WEB_OAUTH_CLIENT,
       redirectUri: environment.APP_URL,
-      scope: "openid profile email",
+      scope: 'openid profile email',
       serverConfig: {
         baseUrl: environment.AM_URL,
         timeout: 30000, // 90000 or less
       },
       realmPath: environment.REALM_PATH,
-      tree: environment.JOURNEY_LOGIN
+      tree: environment.JOURNEY_LOGIN,
     });
 
     try {

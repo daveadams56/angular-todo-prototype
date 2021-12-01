@@ -1,15 +1,18 @@
 <div class="form-check mb-4">
-    <input
-           class="form-check-input"
-           defaultChecked="false"
-           [id]="name"
-           (input)="updateValue($event)"
-           type="checkbox" />
-    <label [for]="name" class="form-check-label">
-        Please accept our below Terms and Conditions
-        <details>
-            <summary class="fw-bold ps-1">{{callback?.getTerms()?.substring(0, 35) + ' ...'}}</summary>
-            {{callback?.getTerms()}}
-        </details>
-    </label>
+  <input
+    class="form-check-input"
+    defaultChecked="false"
+    [id]="name"
+    (input)="updateValue($event)"
+    type="checkbox"
+  />
+  <label [for]="name" class="form-check-label">
+    Please accept our below Terms and Conditions
+    <details>
+      <summary class="fw-bold ps-1">
+        {{ callback?.getTerms()?.substring(0, 35) + " ..." }}
+      </summary>
+      {{ callback?.getTerms() }}
+    </details>
+  </label>
 </div>

@@ -3,9 +3,8 @@ import { FRCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-unknown',
-  templateUrl: './unknown.component.html'
+  templateUrl: './unknown.component.html',
 })
 export class UnknownComponent {
-
-  @Input() callback?: FRCallback
+  @Input() callback?: FRCallback;
 }

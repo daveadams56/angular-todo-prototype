@@ -3,11 +3,10 @@ import { Todo } from '../../todo';
 
 @Component({
   selector: 'app-todo',
-  templateUrl: './todo.component.html'
+  templateUrl: './todo.component.html',
 })
 export class TodoComponent {
-
-  @Input() todo?: Todo
+  @Input() todo?: Todo;
   @Output() completed = new EventEmitter<Todo>();
   @Output() edit = new EventEmitter<Todo>();
   @Output() delete = new EventEmitter<Todo>();

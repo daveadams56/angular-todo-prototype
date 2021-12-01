@@ -5,13 +5,12 @@ import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-logout',
-  templateUrl: './logout.component.html'
+  templateUrl: './logout.component.html',
 })
 export class LogoutComponent implements OnInit {
+  constructor(private router: Router, public userService: UserService) {}
 
-  constructor(private router: Router, public userService: UserService) { }
-
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.logout();
   }
 
@@ -29,5 +28,4 @@ export class LogoutComponent implements OnInit {
   redirectToHome() {
     this.router.navigateByUrl('/home');
   }
-
 }

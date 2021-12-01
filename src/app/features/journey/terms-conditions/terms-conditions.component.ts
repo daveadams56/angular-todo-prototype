@@ -3,16 +3,14 @@ import { TermsAndConditionsCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-terms-conditions',
-  templateUrl: './terms-conditions.component.html'
+  templateUrl: './terms-conditions.component.html',
 })
 export class TermsConditionsComponent {
-
-  @Input() callback?: TermsAndConditionsCallback
-  @Input() name?: string
+  @Input() callback?: TermsAndConditionsCallback;
+  @Input() name?: string;
   @Output() updatedCallback = new EventEmitter<boolean>();
 
   updateValue(event: any): void {
     this.updatedCallback.emit(event.target.checked);
   }
-
 }

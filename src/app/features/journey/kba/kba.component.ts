@@ -3,12 +3,11 @@ import { KbaCreateCallback } from '@forgerock/javascript-sdk/lib';
 
 @Component({
   selector: 'app-kba',
-  templateUrl: './kba.component.html'
+  templateUrl: './kba.component.html',
 })
 export class KbaComponent {
-
-  @Input() callback?: KbaCreateCallback
-  @Input() name?: string
+  @Input() callback?: KbaCreateCallback;
+  @Input() name?: string;
   @Output() setQuestion = new EventEmitter<string>();
   @Output() setAnswer = new EventEmitter<string>();
 

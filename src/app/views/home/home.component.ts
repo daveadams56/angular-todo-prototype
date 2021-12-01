@@ -3,10 +3,8 @@ import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html'
+  templateUrl: './home.component.html',
 })
 export class HomeComponent {
-
-  constructor(public userService: UserService) { }
-
+  constructor(public userService: UserService) {}
 }

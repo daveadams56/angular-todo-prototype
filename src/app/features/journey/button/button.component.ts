@@ -2,11 +2,9 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-button',
-  templateUrl: './button.component.html'
+  templateUrl: './button.component.html',
 })
 export class ButtonComponent {
-
-  @Input() buttonText?: string
-  @Input() submittingForm?: boolean
-
+  @Input() buttonText?: string;
+  @Input() submittingForm?: boolean;
 }

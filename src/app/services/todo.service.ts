@@ -4,10 +4,9 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@forgerock/javascript-sdk';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TodoService {
-
   getTodos(): Promise<Response> {
     return HttpClient.request({
       url: `${environment.API_URL}/todos`,
@@ -15,9 +14,9 @@ export class TodoService {
         headers: {
           'Content-Type': 'application/json',
         },
-        method: "GET"
+        method: 'GET',
       },
-      timeout: 5000
+      timeout: 5000,
     });
   }
 
@@ -29,9 +28,9 @@ export class TodoService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(todo),
-        method: "POST"
+        method: 'POST',
       },
-      timeout: 5000
+      timeout: 5000,
     });
   }
 
@@ -45,14 +44,13 @@ export class TodoService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(todo),
-        method: "POST"
+        method: 'POST',
       },
-      timeout: 5000
+      timeout: 5000,
     });
   }
 
   updateTodo(todo: Todo): Promise<Response> {
-    
     return HttpClient.request({
       url: `${environment.API_URL}/todos/${todo._id}`,
       init: {
@@ -60,21 +58,19 @@ export class TodoService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(todo),
-        method: "POST"
+        method: 'POST',
       },
-      timeout: 5000
+      timeout: 5000,
     });
   }
 
   deleteTodo(todo: Todo): Promise<Response> {
-    
     return HttpClient.request({
       url: `${environment.API_URL}/todos/${todo._id}`,
       init: {
-        method: "DELETE"
+        method: 'DELETE',
       },
-      timeout: 5000
+      timeout: 5000,
     });
   }
-
 }

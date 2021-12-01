@@ -1,11 +1,12 @@
 <div class="form-check mb-3">
-    <input
-           class="form-check-input"
-           [defaultChecked]="callback?.getInputValue()"
-           [id]="name"
-           (change)="updateValue($event)"
-           type="checkbox" />
-    <label [for]="name" class="form-check-label">
-        {{callback?.getPrompt()}}
-    </label>
+  <input
+    class="form-check-input"
+    [defaultChecked]="callback?.getInputValue()"
+    [id]="name"
+    (change)="updateValue($event)"
+    type="checkbox"
+  />
+  <label [for]="name" class="form-check-label">
+    {{ callback?.getPrompt() }}
+  </label>
 </div>

@@ -74,14 +74,10 @@ import { ActionIconComponent } from './icons/action-icon/action-icon.component';
     TodosIconComponent,
     AccountIconComponent,
     TodoIconComponent,
-    ActionIconComponent
+    ActionIconComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
