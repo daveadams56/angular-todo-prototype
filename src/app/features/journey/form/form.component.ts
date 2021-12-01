@@ -86,19 +86,22 @@ export class FormComponent implements OnInit {
     switch (action) {
       case 'login': {
         this.title = "Sign In";
-        this.buttonText = "Sign In"
-        this.tree = environment.JOURNEY_LOGIN
-      } break;
+        this.buttonText = "Sign In";
+        this.tree = environment.JOURNEY_LOGIN;
+        break;
+      }
       case 'register': {
         this.title = "Sign Up";
         this.buttonText = "Register",
         this.tree = environment.JOURNEY_REGISTER
-      } break;
+        break;
+      }
       default: {
         this.title = "Welcome";
         this.buttonText = "Next"
         this.tree = environment.JOURNEY_LOGIN
-      } break;
+        break;
+      }
     }
   }
 
