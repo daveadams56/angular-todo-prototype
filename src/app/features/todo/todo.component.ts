@@ -8,12 +8,12 @@ import { Todo } from '../../todo';
 export class TodoComponent {
 
   @Input() todo?: Todo
-  @Output() complete = new EventEmitter<Todo>();
+  @Output() completed = new EventEmitter<Todo>();
   @Output() edit = new EventEmitter<Todo>();
   @Output() delete = new EventEmitter<Todo>();
 
   setComplete(todo: Todo): void {
-    this.complete.emit(todo);
+    this.completed.emit(todo);
   }
 
   setEdit(todo: Todo): void {

@@ -9,7 +9,7 @@
               [placeholder]="callback?.getPrompt()"
               [attr.required]="isRequired || null"
               (input)="updateValue($event)"
-              [type]="stringAttributeName == 'mail' ? 'email' : 'text'"
+              [type]="stringAttributeName === 'mail' ? 'email' : 'text'"
               [defaultValue]="callback?.getInputValue()"/>
        <label
               [for]="name">{{callback?.getPrompt()}}</label>

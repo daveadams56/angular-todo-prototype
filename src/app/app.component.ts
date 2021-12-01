@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Config, UserManager } from '@forgerock/javascript-sdk'
 import { environment } from '../environments/environment';
 import { UserService } from './services/user.service';
@@ -7,7 +7,7 @@ import { UserService } from './services/user.service';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'angular-todo-prototype';
 
   constructor(public userService: UserService) { }
