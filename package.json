@@ -1,6 +1,6 @@
 {
   "name": "angular-todo-prototype",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "config": "node -r dotenv/config set-env.mjs",
@@ -10,6 +10,7 @@
     "test": "npm run config && ng test",
     "lint": "ng lint"
   },
+  "author": "David Adams <david.adams@forgerock.com>",
   "private": true,
   "dependencies": {
     "@angular/animations": "~12.2.0",

@@ -1,3 +1,13 @@
+/*
+ * angular-todo-prototype
+ *
+ * polyfills.ts
+ *
+ * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
