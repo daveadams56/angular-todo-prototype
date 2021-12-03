@@ -12,7 +12,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
   AttributeInputCallback,
   NameCallback,
-  PolicyRequirement,
   ValidatedCreateUsernameCallback,
 } from '@forgerock/javascript-sdk/lib';
 
@@ -29,9 +28,6 @@ export class TextComponent implements OnInit {
   @Output() updatedCallback = new EventEmitter<string>();
 
   isRequired: boolean = false;
-
-  // TODO adapt input type based on callback type
-  stringAttributeName: string = 'text';
 
   failureMessages: string[] = [];
 
