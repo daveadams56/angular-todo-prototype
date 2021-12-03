@@ -85,6 +85,12 @@ of the MIT license. See the LICENSE file for details.
                 (updatedCallback)="$any(callback).setValue($event)"
               ></app-boolean>
 
+              <app-choice
+                *ngSwitchCase="'ChoiceCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+                (updatedCallback)="$any(callback).setChoiceValue($event)"></app-choice>
+
               <app-terms-conditions
                 *ngSwitchCase="'TermsAndConditionsCallback'"
                 [callback]="$any(callback)"

@@ -1,0 +1,13 @@
+<div class="cstm_form-floating form-floating mb-3">
+    <select (change)="setValue($event)"
+            [id]="name"
+            name="selected"
+            class="cstm_form-select form-select bg-transparent">
+        <option *ngFor="let option of callback?.getChoices()"
+                [selected]="callback?.getChoices()?.indexOf(option) === callback?.getDefaultChoice()"
+                v-bind:key="option">
+            {{option}}
+        </option>
+    </select>
+    <label [for]="name">{{callback?.getPrompt()}}</label>
+</div>

@@ -48,6 +48,7 @@ import { TodosIconComponent } from './icons/todos-icon/todos-icon.component';
 import { AccountIconComponent } from './icons/account-icon/account-icon.component';
 import { TodoIconComponent } from './icons/todo-icon/todo-icon.component';
 import { ActionIconComponent } from './icons/action-icon/action-icon.component';
+import { ChoiceComponent } from './features/journey/choice/choice.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { ActionIconComponent } from './icons/action-icon/action-icon.component';
     AccountIconComponent,
     TodoIconComponent,
     ActionIconComponent,
+    ChoiceComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
