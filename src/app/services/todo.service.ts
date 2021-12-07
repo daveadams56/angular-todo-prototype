@@ -26,16 +26,7 @@ export class TodoService {
    * @returns Promise - Response from the GET request
    */
   getTodos(): Promise<Response> {
-    return HttpClient.request({
-      url: `${environment.API_URL}/todos`,
-      init: {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'GET',
-      },
-      timeout: 5000,
-    });
+    return this.request(`${environment.API_URL}/todos`, 'GET');
   }
 
   /**
@@ -44,17 +35,7 @@ export class TodoService {
    * @returns Promise - Response from the POST request
    */
   createTodo(todo: Todo): Promise<Response> {
-    return HttpClient.request({
-      url: `${environment.API_URL}/todos`,
-      init: {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(todo),
-        method: 'POST',
-      },
-      timeout: 5000,
-    });
+    return this.request(`${environment.API_URL}/todos`, 'POST', todo);
   }
 
   /**
@@ -64,18 +45,7 @@ export class TodoService {
    */
   completeTodo(todo: Todo): Promise<Response> {
     todo.completed = !todo.completed;
-
-    return HttpClient.request({
-      url: `${environment.API_URL}/todos/${todo._id}`,
-      init: {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(todo),
-        method: 'POST',
-      },
-      timeout: 5000,
-    });
+    return this.request(`${environment.API_URL}/todos/${todo._id}`, 'POST', todo);
   }
 
   /**
@@ -84,17 +54,7 @@ export class TodoService {
    * @returns Promise - Response from the POST request
    */
   updateTodo(todo: Todo): Promise<Response> {
-    return HttpClient.request({
-      url: `${environment.API_URL}/todos/${todo._id}`,
-      init: {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(todo),
-        method: 'POST',
-      },
-      timeout: 5000,
-    });
+    return this.request(`${environment.API_URL}/todos/${todo._id}`, 'POST', todo);
   }
 
   /**
@@ -103,10 +63,35 @@ export class TodoService {
    * @returns Promise - Response from the DELETE request
    */
   deleteTodo(todo: Todo): Promise<Response> {
+    return this.request(`${environment.API_URL}/todos/${todo._id}`, 'DELETE');
+  }
+
+  /**
+   * Send a request using the ForgeRock JS SDK Http Client
+   * @param resource - The url for the request
+   * @param method - The method for the request
+   * @param data - The body for the request
+   * @returns Response from the request
+   */
+  request(resource: string, method: string, data?: Todo): Promise<Response> {
+
+    /** ***********************************************************************
+     * SDK INTEGRATION POINT
+     * Summary: HttpClient for protected resource server requests.
+     * ------------------------------------------------------------------------
+     * Details: This helper retrieves your access token from storage and adds
+     * it to the authorization header as a bearer token for making HTTP
+     * requests to protected resource APIs. It's a wrapper around the native
+     * fetch method.
+     *********************************************************************** */
     return HttpClient.request({
-      url: `${environment.API_URL}/todos/${todo._id}`,
+      url: resource,
       init: {
-        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        method: method,
       },
       timeout: 5000,
     });
