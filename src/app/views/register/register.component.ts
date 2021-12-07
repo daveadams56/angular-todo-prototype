@@ -10,6 +10,9 @@
 
 import { Component } from '@angular/core';
 
+/**
+ * Used to show a registration page
+ */
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',

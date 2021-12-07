@@ -22,6 +22,9 @@ export class AppComponent implements OnInit {
 
   constructor(public userService: UserService) {}
 
+  /**
+   * Initialise the SDK and try to load the user when the app loads
+   */
   async ngOnInit(): Promise<void> {
     Config.set({
       clientId: environment.WEB_OAUTH_CLIENT,

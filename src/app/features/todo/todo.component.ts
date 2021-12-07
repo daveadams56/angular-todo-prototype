@@ -40,7 +40,7 @@ export class TodoComponent {
   @Output() delete = new EventEmitter<Todo>();
 
   /**
-   * Emit an event to the parent component, passing the value of the completed Todo
+   * Emit an event to the parent component, passing the value of the Todo to be completed
    * @param todo - the Todo to be completed
    */
   setComplete(todo: Todo): void {

@@ -11,6 +11,9 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
 
+/**
+ * Used to show a home page with information about the application, and links to sign in or register or a personalised welcome
+ */
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',

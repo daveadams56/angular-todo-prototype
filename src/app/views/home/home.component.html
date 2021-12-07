@@ -10,6 +10,9 @@ of the MIT license. See the LICENSE file for details.
 
 <app-header></app-header>
 <div>
+  <!--
+    Display a personalised welcome if the user is authenticated
+  -->
   <div *ngIf="userService.info">
     <div class="cstm_container container-fluid" *ngIf="userService.info">
       <p
@@ -60,6 +63,9 @@ of the MIT license. See the LICENSE file for details.
       </a>
     </p>
 
+    <!-- 
+      Display prompts to sign in or register if the user is not authenticated
+     -->
     <div *ngIf="!userService.info">
       <h2 class="fs-4 fw-normal pt-3 pb-1">Getting started</h2>
       <p>

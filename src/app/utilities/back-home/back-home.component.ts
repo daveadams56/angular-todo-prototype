@@ -10,6 +10,9 @@
 
 import { Component } from '@angular/core';
 
+/**
+ * Used to provide a link to take the user to the root of the application
+ */
 @Component({
   selector: 'app-back-home',
   templateUrl: './back-home.component.html',

@@ -14,6 +14,10 @@ of the MIT license. See the LICENSE file for details.
   <p class="fs-6 text-muted">Create and manage your todos.</p>
 
   <div class="card shadow-sm mb-5">
+
+    <!--
+      Allow the user to easily create a new Todo
+    -->
     <form
       (ngSubmit)="create(newTodo)"
       #newTodoForm="ngForm"
@@ -37,9 +41,15 @@ of the MIT license. See the LICENSE file for details.
       <button type="submit" class="btn btn-primary ms-2">Create</button>
     </form>
 
+    <!--
+      Display list of existing Todos
+    -->
     <ng-container [ngTemplateOutlet]="todos.length > 0 ? todolist : empty">
       <ng-template #todolist>
         <ul class="list-group list-group-flush mb-1">
+          <!--
+            For each Todo observe their outputs for completed, edit or delete events.
+          -->
           <app-todo
             *ngFor="let todo of todos"
             [todo]="todo"
@@ -49,6 +59,10 @@ of the MIT license. See the LICENSE file for details.
           ></app-todo>
         </ul>
 
+        <!--
+          If a child Todo component has indicated that it is ready for editing, display a modal allowing the user to edit and submit or cancel.
+          This is triggered from the Todo component using the modal ID.
+        -->
         <div
           class="modal fade"
           data-bs-backdrop="static"
@@ -105,6 +119,10 @@ of the MIT license. See the LICENSE file for details.
           </div>
         </div>
 
+        <!--
+          If a child Todo component has indicated that it is ready for deletion, display a modal asking for confirmation that they meant to do this.
+          This is triggered from the Todo component using the modal ID.
+        -->
         <div
           class="modal fade"
           data-bs-backdrop="static"
@@ -143,6 +161,9 @@ of the MIT license. See the LICENSE file for details.
         </div>
       </ng-template>
 
+      <!--
+        No Todos to show
+      -->
       <ng-template #empty>
         <ul class="list-group list-group-flush mb-1">
           <li class="cstm_todo-item list-group-item list-group-item-action p-0">

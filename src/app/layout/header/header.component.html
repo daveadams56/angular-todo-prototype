@@ -22,10 +22,16 @@ of the MIT license. See the LICENSE file for details.
       <app-angular-icon size="38px"></app-angular-icon>
     </a>
     <div class="navbar-collapse d-flex align-items-stretch" id="navbarNav">
+      <!--
+        Show simple navigation with login / register links, or links relevant to current route
+      -->
       <ng-container
         [ngTemplateOutlet]="userService.info ? navigation : loginOrRegister"
       >
         <ng-template #navigation>
+          <!--
+            Show navigation links relevant to the current route
+          -->
           <ul class="navbar-nav d-flex align-items-stretch me-auto">
             <li
               key="home"
@@ -72,6 +78,9 @@ of the MIT license. See the LICENSE file for details.
                 class="dropdown-menu dropdown-menu-end shadow-sm pb-0"
                 aria-labelledby="account_dropdown"
               >
+                <!--
+                  Show user info from user service
+                -->
                 <li>
                   <div class="dropdown-header border-bottom">
                     <p class="fw-bold fs-6 mb-0 text-dark">

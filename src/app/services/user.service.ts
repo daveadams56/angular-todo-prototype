@@ -10,10 +10,20 @@
 
 import { Injectable } from '@angular/core';
 
+/**
+ * Used to share user state between components
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  /**
+   * State representing whether the user is authenticated or not
+   */
   isAuthenticated: boolean = false;
+
+  /**
+   * State repreesnting previously retrieved user information
+   */
   info?: any;
 }
