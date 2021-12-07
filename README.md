@@ -80,16 +80,11 @@ REST_OAUTH_SECRET=secret (the secret for the private OAuth 2.0 client/applicatio
 WEB_OAUTH_CLIENT=example-angular-app (the name of the public OAuth 2.0 client/application)
 ```
 
-### Installing Dependencies and Run Build
-
-**Run from root of repo**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the repo. You can run this sample app's scripts from the root with the `-w` option to specify this sample app.
+### Installing Dependencies
 
 ```sh
-# Install all dependencies (no need to pass the -w option)
+# Install all dependencies
 npm install
-
-# Build this sample app project
-npm run build -w angular-todo
 ```
 
 ### Update Your `/etc/hosts` File
@@ -107,17 +102,10 @@ sudo vim /etc/hosts
 
 ### Run the Servers
 
-Now, run the below commands to start the processes needed for building the application and running the servers for both client and API server:
+Run the below commands to start the processes needed for building the application and running the servers for both client and API server:
 
 ```sh
-# In one terminal window, run the following watch command
-# This "watches" the client source files for changes and rebuilds when needed
-npm run watch -w angular-todo
-```
-
-```sh
-# In another terminal window, run the dev servers for both client and server
-npm run start -w angular-todo
+npm start
 ```
 
 Now, you should be able to visit `https://angular.example.com:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `https://api.example.com:9443` as the REST API for your todos (the Resource Server).
