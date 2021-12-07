@@ -41,6 +41,16 @@ export class AuthGuard implements CanActivate {
     } else {
       try {
         // Assume user is likely authenticated if there are tokens
+
+        /** *****************************************************************
+         * SDK INTEGRATION POINT
+         * Summary: Optional client-side route access validation
+         * ------------------------------------------------------------------
+         * Details: Here, you could just make sure tokens exist –
+         * TokenStorage.get() – or, validate tokens, renew expiry timers,
+         * session checks ... Below, we are calling the userinfo endpoint to
+         * ensure valid tokens before continuing, but it's optional.
+         ***************************************************************** */
         let info = await UserManager.getCurrentUser();
         this.userService.isAuthenticated = true;
         this.userService.info = info;

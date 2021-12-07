@@ -26,6 +26,15 @@ of the MIT license. See the LICENSE file for details.
     >
       <option value="">No selection</option>
 
+      <!--
+        ****************************************************************************
+        * SDK INTEGRATION POINT
+        * Summary: SDK callback methods for getting values
+        * --------------------------------------------------------------------------
+        * Details: Each callback is wrapped by the SDK to provide helper methods
+        * for accessing values from the callbacks received from AM
+        ****************************************************************************
+      -->
       <option
         *ngFor="let question of callback?.getPredefinedQuestions()"
         v-bind:key="question"
@@ -37,6 +46,15 @@ of the MIT license. See the LICENSE file for details.
     <label [for]="name">{{ callback?.getPrompt() }}</label>
   </div>
   <div class="cstm_form-floating form-floating pb-5 mb-5 border-bottom pb-3">
+    <!--
+      ****************************************************************************
+      * SDK INTEGRATION POINT
+      * Summary: SDK callback methods for getting values
+      * --------------------------------------------------------------------------
+      * Details: Each callback is wrapped by the SDK to provide helper methods
+      * for accessing values from the callbacks received from AM
+      ****************************************************************************
+    -->
     <input
       class="cstm_form-control form-control bg-transparent"
       [id]="callback?.payload?.input?.[1]?.name"

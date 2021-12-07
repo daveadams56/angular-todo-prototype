@@ -64,7 +64,29 @@ of the MIT license. See the LICENSE file for details.
           <div
                *ngFor="let callback of step?.callbacks"
                v-bind:key="callback.payload._id">
+
+            <!--
+            ************************************************************************
+            * SDK INTEGRATION POINT
+            * Summary:SDK callback method for getting the callback type
+            * ----------------------------------------------------------------------
+            * Details: This method is helpful in quickly identifying the callback
+            * when iterating through an unknown list of AM callbacks
+            ************************************************************************
+            -->
+            
             <container-element [ngSwitch]="callback.getType()">
+              
+              <!--
+                ***************************************************************************
+                * SDK INTEGRATION POINT
+                * Summary: SDK callback methods for setting values
+                * ------------------------------------------------------------------------
+                * Details: Each callback is wrapped by the SDK to provide helper methods
+                * for writing values to the callbacks received from AM
+                ***************************************************************************
+              -->
+              
               <!--
                 Any callbacks of type NameCallback, ValidatedCreateUsernameCallback, and StringAttributeInputCallback can all be handled by the Text component.
               -->

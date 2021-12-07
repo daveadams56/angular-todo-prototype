@@ -35,6 +35,15 @@ export class LogoutComponent implements OnInit {
    */
   async logout() {
     try {
+      /** *********************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Logout, end session and revoke tokens
+       * ----------------------------------------------------------------------
+       * Details: Since this method is a global method via the Context API,
+       * any part of the application can log a user out. This is helpful when
+       * APIs are called and we get a 401 response, but here we respond to user
+       * input clicking logout. 
+       ********************************************************************* */
       await FRUser.logout();
       this.userService.info = undefined;
       this.userService.isAuthenticated = false;

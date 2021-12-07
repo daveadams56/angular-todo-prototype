@@ -22,6 +22,15 @@ of the MIT license. See the LICENSE file for details.
       <!--
         Display a preview of the terms and conditions until the user expands the view
       -->
+      <!--
+        ****************************************************************************
+        * SDK INTEGRATION POINT
+        * Summary: SDK callback methods for getting values
+        * --------------------------------------------------------------------------
+        * Details: Each callback is wrapped by the SDK to provide helper methods
+        * for accessing values from the callbacks received from AM
+        ****************************************************************************
+      -->
       <summary class="fw-bold ps-1">
         {{ callback?.getTerms()?.substring(0, 35) + " ..." }}
       </summary>

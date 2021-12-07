@@ -26,6 +26,23 @@ export class AppComponent implements OnInit {
    * Initialise the SDK and try to load the user when the app loads
    */
   async ngOnInit(): Promise<void> {
+
+    /** ***************************************************************************
+     * SDK INTEGRATION POINT
+     * Summary: Configure the SDK
+     * ----------------------------------------------------------------------------
+     * Details: Below, you will see the following settings:
+     * - clientId: (OAuth2 only) this is the OAuth2 client you created in ForgeRock
+     * - redirectUri: (OAuth2 only) this is the URI/URL of this app too which the
+     *   OAuth flow will redirect
+     * - scope: (OAuth2 only) these are the OAuth scopes that you will request from
+     *   ForgeRock
+     * - serverConfig: this includes the baseUrl of your ForgeRock AM, should
+     *   include `/am/` at the end
+     * - realmPath: this is the realm you are wanting to use within ForgeRock
+     * - tree: The authentication journey/tree that you are wanting to use
+     *************************************************************************** */
+
     Config.set({
       clientId: environment.WEB_OAUTH_CLIENT,
       redirectUri: environment.APP_URL,
@@ -38,6 +55,15 @@ export class AppComponent implements OnInit {
       tree: environment.JOURNEY_LOGIN,
     });
 
+    /** *****************************************************************
+     * SDK INTEGRATION POINT
+     * Summary: Optional client-side route access validation
+     * ------------------------------------------------------------------
+     * Details: Here, you could just make sure tokens exist –
+     * TokenStorage.get() – or, validate tokens, renew expiry timers,
+     * session checks ... Below, we are calling the userinfo endpoint to
+     * ensure valid tokens before continuing, but it's optional.
+     ***************************************************************** */
     try {
       // Assume user is likely authenticated if there are tokens
       let info = await UserManager.getCurrentUser();

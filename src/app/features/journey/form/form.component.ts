@@ -85,8 +85,22 @@ export class FormComponent implements OnInit {
     this.submittingForm = true;
 
     try {
+      /** *********************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Call the SDK's next method to submit the current step.
+       * ----------------------------------------------------------------------
+       * Details: This calls the next method with the previous step, expecting
+       * the next step to be returned, or a success or failure.
+       ********************************************************************* */
       let nextStep = await FRAuth.next(step, { tree: this.tree });
 
+      /** *******************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Handle step based on step type
+       * --------------------------------------------------------------------
+       * Details: Determine whether the step is a login failure, success or
+       * next step in the authentication journey, and handle appropriately.
+       ******************************************************************* */
       switch (nextStep.type) {
         case 'LoginFailure':
           this.handleFailure(nextStep);
@@ -119,8 +133,24 @@ export class FormComponent implements OnInit {
     this.success = success;
 
     try {
+      /** *********************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Get OAuth/OIDC tokens with Authorization Code Flow w/PKCE.
+       * ----------------------------------------------------------------------
+       * Details: Since we have successfully authenticated the user, we can now
+       * get the OAuth2/OIDC tokens. We are passing the `forceRenew` option to
+       * ensure we get fresh tokens, regardless of existing tokens.
+       ************************************************************************* */
       await TokenManager.getTokens({ forceRenew: true });
 
+      /** *********************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Call the user info endpoint for some basic user data.
+       * ----------------------------------------------------------------------
+       * Details: This is an OAuth2 call that returns user information with a
+       * valid access token. This is optional and only used for displaying
+       * user info in the UI.
+       ********************************************************************* */
       let info = await UserManager.getCurrentUser();
       this.userService.info = info;
       this.userService.isAuthenticated = true;
@@ -170,17 +200,5 @@ export class FormComponent implements OnInit {
         break;
       }
     }
-  }
-
-  /**
-   * Reset the form and the state of this authentication attempt, before starting a new authentication attempt
-   */
-  reset() {
-    this.step = undefined;
-    this.failure = undefined;
-    this.success = undefined;
-    this.title = undefined;
-    this.submittingForm = false;
-    this.nextStep();
   }
 }
