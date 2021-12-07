@@ -11,15 +11,33 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AttributeInputCallback } from '@forgerock/javascript-sdk/lib';
 
+/**
+ * Used to display checkboxes
+ */
 @Component({
   selector: 'app-boolean',
   templateUrl: './boolean.component.html',
 })
 export class BooleanComponent {
+  /**
+   * The callback to be represented as a checkbox
+   */
   @Input() callback?: AttributeInputCallback<boolean>;
+
+  /**
+   * The name of the callback
+   */
   @Input() name?: string;
+
+  /**
+   * Emits a boolean representing the updated state of the checkbox
+   */
   @Output() updatedCallback = new EventEmitter<boolean>();
 
+  /**
+   * Emit an event to the parent component, passing the updated value of the checkbox
+   * @param event - the updated value of the checkbox
+   */
   updateValue(event: any): void {
     this.updatedCallback.emit(event.currentTarget.checked);
   }

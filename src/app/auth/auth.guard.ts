@@ -25,6 +25,13 @@ import { UserManager } from '@forgerock/javascript-sdk';
 export class AuthGuard implements CanActivate {
   constructor(public userService: UserService, private router: Router) {}
 
+  /**
+   * Extends CanActivate to protect selected routes from unauthenticated access
+   * 
+   * @param next - Route that the user is trying to access
+   * @param state - Router state
+   * @returns Promise - Boolean or route to redirect the user to
+   */
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot

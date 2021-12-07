@@ -13,6 +13,9 @@ import { FRUser } from '@forgerock/javascript-sdk';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 
+/**
+ * Used to log the user out whilst a spinner and message are displayed
+ */
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
@@ -20,10 +23,16 @@ import { UserService } from '../../services/user.service';
 export class LogoutComponent implements OnInit {
   constructor(private router: Router, public userService: UserService) {}
 
+  /**
+   * As soon as this component loads we want to log the user out
+   */
   ngOnInit(): void {
     this.logout();
   }
 
+  /**
+   * Log the user out and redirect to the home page
+   */
   async logout() {
     try {
       await FRUser.logout();
@@ -35,6 +44,9 @@ export class LogoutComponent implements OnInit {
     }
   }
 
+  /**
+   * Redirect the user to the home page
+   */
   redirectToHome() {
     this.router.navigateByUrl('/home');
   }

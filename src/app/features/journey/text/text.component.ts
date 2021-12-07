@@ -15,31 +15,63 @@ import {
   ValidatedCreateUsernameCallback,
 } from '@forgerock/javascript-sdk/lib';
 
+/**
+ * Used to collect a username, email address or any other text
+ */
 @Component({
   selector: 'app-text',
   templateUrl: './text.component.html',
 })
 export class TextComponent implements OnInit {
+  /**
+   * The callback to be represented as a username, create username, or text input field
+   */
   @Input() callback?:
     | NameCallback
     | ValidatedCreateUsernameCallback
     | AttributeInputCallback<string>;
+  
+  /**
+   * The name of the callback
+   */  
   @Input() name?: string;
+
+  /**
+   * Emits a string representing the text entered by the user
+   */
   @Output() updatedCallback = new EventEmitter<string>();
 
+  /**
+   * Is the text a required field in the form
+   */
   isRequired: boolean = false;
 
+  /**
+   * Validation error messages
+   */
   failureMessages: string[] = [];
 
+  /**
+   * Initialise any failure messages and whether this field is mandatory
+   */
   ngOnInit(): void {
     this.isRequired = this.getIsRequired(this.callback);
     this.failureMessages = this.evaluateFailedPolicies(this.callback);
   }
 
+  /**
+   * Emit an event to the parent component, passing the text entered
+   * @param event - the value of the text field
+   */
   updateValue(event: any): void {
     this.updatedCallback.emit(event.target.value);
   }
 
+  /**
+  * Determines whether this field is mandatory
+  * @param callback - the text callback to be evaluated
+  * @returns boolean - is this field mandatory
+  */
   getIsRequired(
     callback?:
       | NameCallback
@@ -62,6 +94,11 @@ export class TextComponent implements OnInit {
     }
   }
 
+  /**
+   * Process text policy feedback from AM
+   * @param callback - the text callback to be evaluated
+   * @returns string[] - an array of password policy failures
+   */
   evaluateFailedPolicies(
     callback?:
       | NameCallback

@@ -8,6 +8,9 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
+/**
+ * Defines the expected structure of a single Todo item
+ */
 export interface Todo {
   _rev?: string;
   _id?: string;
