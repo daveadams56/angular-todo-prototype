@@ -20,7 +20,6 @@ import { HttpClient } from '@forgerock/javascript-sdk';
   providedIn: 'root',
 })
 export class TodoService {
-
   /**
    * Send a request to retrieve all Todos for the current user
    * @returns Promise - Response from the GET request
@@ -45,7 +44,11 @@ export class TodoService {
    */
   completeTodo(todo: Todo): Promise<Response> {
     todo.completed = !todo.completed;
-    return this.request(`${environment.API_URL}/todos/${todo._id}`, 'POST', todo);
+    return this.request(
+      `${environment.API_URL}/todos/${todo._id}`,
+      'POST',
+      todo
+    );
   }
 
   /**
@@ -54,7 +57,11 @@ export class TodoService {
    * @returns Promise - Response from the POST request
    */
   updateTodo(todo: Todo): Promise<Response> {
-    return this.request(`${environment.API_URL}/todos/${todo._id}`, 'POST', todo);
+    return this.request(
+      `${environment.API_URL}/todos/${todo._id}`,
+      'POST',
+      todo
+    );
   }
 
   /**
@@ -74,7 +81,6 @@ export class TodoService {
    * @returns Response from the request
    */
   request(resource: string, method: string, data?: Todo): Promise<Response> {
-
     /** ***********************************************************************
      * SDK INTEGRATION POINT
      * Summary: HttpClient for protected resource server requests.

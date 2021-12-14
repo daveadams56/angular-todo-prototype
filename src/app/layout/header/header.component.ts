@@ -20,7 +20,6 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-
   /**
    * Initialise with user service and router as we will be using user info and showing router links
    * @param userService - Determine whether user is authenticated and get user info retrieved by other parts of the app

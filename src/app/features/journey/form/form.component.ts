@@ -29,7 +29,6 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './form.component.html',
 })
 export class FormComponent implements OnInit {
-
   /**
    * The value representing whether this is a login or registration journey, or something else
    */

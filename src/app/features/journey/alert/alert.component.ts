@@ -18,7 +18,6 @@ import { Component, Input } from '@angular/core';
   templateUrl: './alert.component.html',
 })
 export class AlertComponent {
-
   /**
    * Determines whether this is an error or success alert
    */

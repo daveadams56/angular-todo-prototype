@@ -30,10 +30,10 @@ export class TextComponent implements OnInit {
     | NameCallback
     | ValidatedCreateUsernameCallback
     | AttributeInputCallback<string>;
-  
+
   /**
    * The name of the callback
-   */  
+   */
   @Input() name?: string;
 
   /**
@@ -68,10 +68,10 @@ export class TextComponent implements OnInit {
   }
 
   /**
-  * Determines whether this field is mandatory
-  * @param callback - the text callback to be evaluated
-  * @returns boolean - is this field mandatory
-  */
+   * Determines whether this field is mandatory
+   * @param callback - the text callback to be evaluated
+   * @returns boolean - is this field mandatory
+   */
   getIsRequired(
     callback?:
       | NameCallback

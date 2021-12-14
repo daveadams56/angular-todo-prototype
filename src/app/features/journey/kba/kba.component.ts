@@ -19,7 +19,6 @@ import { KbaCreateCallback } from '@forgerock/javascript-sdk/lib';
   templateUrl: './kba.component.html',
 })
 export class KbaComponent {
-
   /**
    * The callback to be represented as a KBA security question
    */

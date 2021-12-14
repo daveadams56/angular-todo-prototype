@@ -20,7 +20,6 @@ import { TodoService } from '../../services/todo.service';
   templateUrl: './todos.component.html',
 })
 export class TodosComponent implements OnInit {
-
   /**
    * The existing Todos
    */

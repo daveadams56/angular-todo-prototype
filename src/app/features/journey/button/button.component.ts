@@ -18,7 +18,6 @@ import { Component, Input } from '@angular/core';
   templateUrl: './button.component.html',
 })
 export class ButtonComponent {
-
   /**
    * The text to be displayed on the button
    */

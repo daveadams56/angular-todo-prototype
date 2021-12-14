@@ -26,7 +26,6 @@ export class AppComponent implements OnInit {
    * Initialise the SDK and try to load the user when the app loads
    */
   async ngOnInit(): Promise<void> {
-
     /** ***************************************************************************
      * SDK INTEGRATION POINT
      * Summary: Configure the SDK

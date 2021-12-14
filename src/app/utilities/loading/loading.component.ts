@@ -18,7 +18,6 @@ import { Component, Input } from '@angular/core';
   templateUrl: './loading.component.html',
 })
 export class LoadingComponent {
-  
   /**
    * The message to be displayed with the spinner
    */
