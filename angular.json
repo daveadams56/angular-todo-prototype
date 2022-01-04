@@ -65,12 +65,12 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "options": {
             "host": "angular.example.com",
-            "port": 8443,
+            "port": 18443,
             "ssl": true,
             "sslCert": "./example.com+5.pem",
             "sslKey": "./example.com+5-key.pem"

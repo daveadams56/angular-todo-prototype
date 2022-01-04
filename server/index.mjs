@@ -50,7 +50,8 @@ routes(app);
 /**
  * Attach application to port and listen for requests
  */
-if (process.env.DEVELOPMENT) {
+console.log(process.env.DEVELOPMENT)
+if (process.env.DEVELOPMENT === 'true') {
   /**
    * Ignore self-signed cert warning
    */
@@ -58,10 +59,12 @@ if (process.env.DEVELOPMENT) {
 
   console.log('Creating secure server');
   createSecureServer({ cert: SEC_CERT, key: SEC_KEY }, app).listen(PORT);
+  console.log(`Listening to HTTPS on secure port: ${PORT}`);
 } else {
   // Prod uses Nginx, so run regular server
   console.log('Creating regular server');
   createServer(app).listen(PORT);
+  console.log(`Listening to HTTP on port: ${PORT}`);
 }
 
-console.log(`Listening to HTTPS on secure port: ${PORT}`);
+

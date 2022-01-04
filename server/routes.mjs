@@ -80,4 +80,8 @@ export default async function routes(app) {
   app.get('/healthcheck', (_, res) => {
     res.status(204).send('Ok');
   });
+
+  app.post('/subscription', async (req, res) => {
+    res.json({"status": "active"})
+  });
 }
