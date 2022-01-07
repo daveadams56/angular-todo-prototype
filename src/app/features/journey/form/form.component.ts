@@ -9,7 +9,7 @@
  */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import {
   FRAuth,
@@ -69,7 +69,7 @@ export class FormComponent implements OnInit {
    */
   tree?: string;
 
-  constructor(private router: Router, public userService: UserService) {}
+  constructor(private router: Router, public userService: UserService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.setConfigForAction(this.action);
@@ -154,7 +154,11 @@ export class FormComponent implements OnInit {
       this.userService.info = info;
       this.userService.isAuthenticated = true;
 
-      this.router.navigateByUrl('/');
+      if (this.route.snapshot.queryParamMap.get("goto")) {
+        window.location.href = this.route.snapshot.queryParamMap.get('goto')!;
+      } else {
+        this.router.navigateByUrl('/');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -201,3 +205,7 @@ export class FormComponent implements OnInit {
     }
   }
 }
+function $any(arg0: string | null): string {
+  throw new Error('Function not implemented.');
+}
+

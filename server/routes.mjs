@@ -81,7 +81,7 @@ export default async function routes(app) {
     res.status(204).send('Ok');
   });
 
-  app.post('/subscription', async (req, res) => {
+  app.get('/subscription', async (req, res) => {
     res.json({"status": "active"})
   });
 }
