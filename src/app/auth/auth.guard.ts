@@ -51,7 +51,7 @@ export class AuthGuard implements CanActivate {
          * session checks ... Below, we are calling the userinfo endpoint to
          * ensure valid tokens before continuing, but it's optional.
          ***************************************************************** */
-        let info = await UserManager.getCurrentUser();
+        const info = await UserManager.getCurrentUser();
         this.userService.isAuthenticated = true;
         this.userService.info = info;
         return true;

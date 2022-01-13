@@ -9,7 +9,7 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TermsAndConditionsCallback } from '@forgerock/javascript-sdk/lib';
+import { TermsAndConditionsCallback } from '@forgerock/javascript-sdk';
 
 /**
  * Used to display terms and conditions, and collect the user's acceptance

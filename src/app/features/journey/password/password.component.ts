@@ -12,7 +12,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
   PasswordCallback,
   ValidatedCreatePasswordCallback,
-} from '@forgerock/javascript-sdk/lib';
+} from '@forgerock/javascript-sdk';
 
 /**
  * Used to collect or set a password

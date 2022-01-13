@@ -13,7 +13,7 @@ import {
   AttributeInputCallback,
   NameCallback,
   ValidatedCreateUsernameCallback,
-} from '@forgerock/javascript-sdk/lib';
+} from '@forgerock/javascript-sdk';
 
 /**
  * Used to collect a username, email address or any other text
