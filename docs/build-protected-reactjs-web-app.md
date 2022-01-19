@@ -219,11 +219,11 @@ DEBUGGER_OFF=false
 DEVELOPMENT=true
 JOURNEY_LOGIN=Login
 JOURNEY_REGISTER=Registration
-SEC_KEY_FILE=key-file.pem
-SEC_CERT_FILE=cert-file.pem
+SEC_KEY_FILE=example.com+5-key.pem
+SEC_CERT_FILE=example.com+5.pem
 REALM_PATH=alpha
 REST_OAUTH_CLIENT=RestOAuthClient
-REST_OAUTH_SECRET=6MWE8hs46k68g9s7fHOJd2LEfv
+REST_OAUTH_SECRET=changeit!
 WEB_OAUTH_CLIENT=WebOAuthClient
 ```
 
@@ -273,41 +273,34 @@ Now that we have our environment and servers setup, let’s jump into the applic
 
 First, open up the `src/app/app.component.ts` file, import the `Config` object from the JavaScript SDK and call the `set` function on this object.
 
-To import the `Config` object, add the following code to the top of the file:
-```
-import { Config, UserManager } from '@forgerock/javascript-sdk';
+To import the `Config` object, add the following code to the file imports:
+```diff-ts
+import { Component, OnInit } from '@angular/core';
+import { environment } from '../environments/environment';
+import { UserService } from './services/user.service';
++ import { Config, UserManager } from '@forgerock/javascript-sdk';
+
+@@ collapsed @@
 ```
 
 Now configure the SDK using the Set function by adding the following code to the `ngOnInit` function:
+```diff-ts
+@@ collapsed @@
+async ngOnInit(): Promise<void> {
++ Config.set({
++   clientId: environment.WEB_OAUTH_CLIENT,
++   redirectUri: environment.APP_URL,
++   scope: 'openid profile email',
++   serverConfig: {
++   baseUrl: environment.AM_URL,
++   timeout: 30000, // 90000 or less
++   },
++   realmPath: environment.REALM_PATH,
++   tree: environment.JOURNEY_LOGIN,
++ });
+@@ collapsed @@
 ```
-    /** ***************************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Configure the SDK
-     * ----------------------------------------------------------------------------
-     * Details: Below, you will see the following settings:
-     * - clientId: (OAuth2 only) this is the OAuth2 client you created in ForgeRock
-     * - redirectUri: (OAuth2 only) this is the URI/URL of this app too which the
-     *   OAuth flow will redirect
-     * - scope: (OAuth2 only) these are the OAuth scopes that you will request from
-     *   ForgeRock
-     * - serverConfig: this includes the baseUrl of your ForgeRock AM, should
-     *   include `/am/` at the end
-     * - realmPath: this is the realm you are wanting to use within ForgeRock
-     * - tree: The authentication journey/tree that you are wanting to use
-     *************************************************************************** */
-
-    Config.set({
-      clientId: environment.WEB_OAUTH_CLIENT,
-      redirectUri: environment.APP_URL,
-      scope: 'openid profile email',
-      serverConfig: {
-        baseUrl: environment.AM_URL,
-        timeout: 30000, // 90000 or less
-      },
-      realmPath: environment.REALM_PATH,
-      tree: environment.JOURNEY_LOGIN,
-    });
-```
+{: .diff-highlight}
 
 The use of `set` should always be the first SDK method called and is frequently done at the application’s top-level file. To configure the SDK to communicate with the journeys, OAuth clients, and realms of the appropriate ForgeRock server, pass a configuration object with the appropriate values.
 
@@ -319,224 +312,144 @@ Go back to your browser and refresh the home page. There should be no change to 
 
 First, let’s review how the application renders the home page:
 
-`HomeComponent` consisting of `views/home/home.component.html` (HTML template with Angular directives), and `views/home/home.component.ts` (Angular component).
+`HomeComponent` consisting of `src/app/views/home/home.component.html` (HTML template with Angular directives), and `src/app/views/home/home.component.ts` (Angular component).
 
 For the login page, the same pattern applies:
 
-`LoginComponent` consisting of `views/home/home.component.html` and `views/home/home.component.ts`. This is a simple view component, which includes `FormComponent` which actually invokes the SDK - more on that shortly.
+`LoginComponent` consisting of `src/app/views/home/home.component.html` and `src/app/views/home/home.component.ts`. This is a simple view component, which includes `FormComponent` which actually invokes the SDK - more on that shortly.
 
 Navigate to the app’s login page within your browser. You should see a "loading" spinner and message that's persistent since it doesn't have the data needed to render the form. To ensure the correct form is rendered, the initial data needs to be retrieved from the ForgeRock server. That will be the first task.
 
 {% include full-image-with-caption.html imageurl="/images/community/build-angular-app/login-page-spinner.png" title="Login page with spinner" caption="Screenshot of to-app's login with spinner" %}
 
-Since most of the action is taking place in `features/journey/form.html` and `features/journey/form.ts`, open both and add the SDK import to `form.ts`:
+Since most of the action is taking place in `src/app/features/journey/form/form.component.html` and `src/app/features/journey/form/form.component.ts`, open both and add the SDK import to `form.component.ts`:
 
-```
-import { FRAuth } from '@forgerock/javascript-sdk';
+```diff-ts
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { UserService } from 'src/app/services/user.service';
++ import { FRAuth, FRLoginFailure, FRLoginSuccess, FRStep } from '@forgerock/javascript-sdk';
+@@ collapsed @@
 ```
 {: .diff-highlight}
 
 `FRAuth` is the first object used as it provides the necessary methods for authenticating a user against the Login **Journey**/**Tree**. Use the `start` method of `FRAuth` as it returns data we need for rendering the form.
 
-As we did earlier, import FRAuth and components that we will need to complete this section:
-
-```
-import {
-  FRAuth,
-  FRLoginFailure,
-  FRLoginSuccess,
-  FRStep
-} from '@forgerock/javascript-sdk';
-```
-
 Add the following code to the `nextStep` function to call the start function, initiating the authentication attempt using the SDK:
 
+```diff-ts
+@@ collapsed @@
+async nextStep(step?: FRStep): Promise<void> {
+  this.submittingForm = true;
+
+  try {
++   let nextStep = await FRAuth.next(step, { tree: this.tree });
+  } catch (err) {
+      console.log(err);
+  } finally {
+      this.submittingForm = false;
+  } 
+}
+@@ collapsed @@
 ```
-      /** *********************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Call the SDK's next method to submit the current step.
-       * ----------------------------------------------------------------------
-       * Details: This calls the next method with the previous step, expecting
-       * the next step to be returned, or a success or failure.
-       ********************************************************************* */
-      let nextStep = await FRAuth.next(step, { tree: this.tree });
-```
+{: .diff-highlight}
+
 The result of this initial request will be stored in a variable named `nextStep`; we will now need to work out whether this is a login failure, success, or step with instructions for what needs to be rendered to the user for input collection.
 
 To handle these outcomes, add the following code after the code you added above:
 
+```diff-ts
+@@ collapsed @@
+async nextStep(step?: FRStep): Promise<void> {
+  this.submittingForm = true;
+
+  try {
+    let nextStep = await FRAuth.next(step, { tree: this.tree });
+
++   switch (nextStep.type) {
++       case 'LoginFailure':
++         this.handleFailure(nextStep);
++         break;
++       case 'LoginSuccess':
++         this.handleSuccess(nextStep);
++         break;
++       case 'Step':
++         this.handleStep(nextStep);
++         break;
++       default:
++         this.handleFailure();
++     }
+  } catch (err) {
+      console.log(err);
+  } finally {
+      this.submittingForm = false;
+  } 
+}
+@@ collapsed @@
 ```
-      /** *******************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Handle step based on step type
-       * --------------------------------------------------------------------
-       * Details: Determine whether the step is a login failure, success or
-       * next step in the authentication journey, and handle appropriately.
-       ******************************************************************* */
-      switch (nextStep.type) {
-        case 'LoginFailure':
-          this.handleFailure(nextStep);
-          break;
-        case 'LoginSuccess':
-          this.handleSuccess(nextStep);
-          break;
-        case 'Step':
-          this.handleStep(nextStep);
-          break;
-        default:
-          this.handleFailure();
-      }
-```
+{: .diff-highlight}
 
 The above code will result in two logs to your console: one that will be `null` and the other should be an object with a few properties. The property to focus on is the `callbacks` property. This property contains the instructions for what needs to be rendered to the user for input collection.
 
 To process these instructions, we will now use the `*ngFor` and `ngSwitch` directives to iterate over the callbacks and switch based on the callback type, so we can use the appropriate component to render something to the user. Once the user has provided their input and they submit the form, we want to catch the submission and invoke the nextStep function once again.
 
-So starting with the form submission, we will add the following code inside the `<div id="callbacks">` tag in the `FormComponent` template (`features/journey/form.html`)
+So starting with the form submission, we will add the following code inside the `<div id="callbacks">` tag in the `FormComponent` template (`src/app/features/journey/form.html`)
 
 
+```diff-ts
+@@ collapsed @@
+<div id="callbacks">
++ <form #callbackForm (ngSubmit)="nextStep(step)" ngNativeValidate class="cstm_form">
++   <app-button [buttonText]="buttonText" [submittingForm]="submittingForm">
++   </app-button>
++ </form>
+</div>
+@@ collapsed @@
 ```
-        <form
-          #callbackForm
-          (ngSubmit)="nextStep(step)"
-          ngNativeValidate
-          class="cstm_form">
-          <!--
-            Show a button to submit the form
-          -->
-          <app-button
-            [buttonText]="buttonText"
-            [submittingForm]="submittingForm"
-          ></app-button>
-        </form>
-```
+{: .diff-highlight}
 
 The form should now catch submission as we want it to; to iterate through the callbacks, add the following code inside the `<form>` tag you just added, just before the `<app-button>` tag:
+```diff-ts
+@@ collapsed @@
+<div id="callbacks">
+  <form #callbackForm (ngSubmit)="nextStep(step)" ngNativeValidate class="cstm_form">
++    <div *ngFor="let callback of step?.callbacks" v-bind:key="callback.payload._id">
++    </div>
+     <app-button [buttonText]="buttonText" [submittingForm]="submittingForm">
+     </app-button>
+  </form>
+</div>
+@@ collapsed @@      
 ```
-          <!--
-            Iterate through callbacks received from AM and invoke the callback to the appropriate callback component.
-            The input to each component will be the callback and callback name, and the outputs will be the events emitted by the component.
-            Events emitted by each component are handled by an expression mapping them to SDK functions, e.g. to set the password on the callback using the emitted value.
-          -->
-          <div
-            *ngFor="let callback of step?.callbacks"
-            v-bind:key="callback.payload._id"
-          >
-          </div>
-```
+{: .diff-highlight}
 
 To switch based on the type of the callback, add the following code within the `<div>` tag you just added:
+```diff-ts
+@@ collapsed @@
+<div *ngFor="let callback of step?.callbacks" v-bind:key="callback.payload._id">
++  <container-element [ngSwitch]="callback.getType()">
++  </container-element>
+</div>
+@@ collapsed @@    
 ```
-            <!--
-            ************************************************************************
-            * SDK INTEGRATION POINT
-            * Summary:SDK callback method for getting the callback type
-            * ----------------------------------------------------------------------
-            * Details: This method is helpful in quickly identifying the callback
-            * when iterating through an unknown list of AM callbacks
-            ************************************************************************
-            -->
+{: .diff-highlight}
 
-            <container-element [ngSwitch]="callback.getType()">
-            </container-element>
+Finally, to render something appropriate to the user based on the callback type (and handle unknown callbacks), add the below code within the `<container-element>` tag you just added. 
+```diff-ts
+@@ collapsed @@
+<container-element [ngSwitch]="callback.getType()">
++  <app-text *ngSwitchCase="'NameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)">
++  </app-text>
+
++  <app-password *ngSwitchCase="'PasswordCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setPassword($event)">
++  </app-password>
+
++  <app-unknown *ngSwitchDefault [callback]="callback"></app-unknown>
+</container-element>
+@@ collapsed @@
 ```
-Finally, to render something appropriate to the user based on the callback type, add the below code within the `<container-element>` tag you just added. 
-```
-              <!--
-                ***************************************************************************
-                * SDK INTEGRATION POINT
-                * Summary: SDK callback methods for setting values
-                * ------------------------------------------------------------------------
-                * Details: Each callback is wrapped by the SDK to provide helper methods
-                * for writing values to the callbacks received from AM
-                ***************************************************************************
-              -->
-
-              <!--
-                Any callbacks of type NameCallback, ValidatedCreateUsernameCallback, and StringAttributeInputCallback can all be handled by the Text component.
-              -->
-              <app-text
-                *ngSwitchCase="'NameCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setName($event)"
-              ></app-text>
-              <app-text
-                *ngSwitchCase="'ValidatedCreateUsernameCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setName($event)"
-              ></app-text>
-              <app-text
-                *ngSwitchCase="'StringAttributeInputCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setValue($event)"
-              ></app-text>
-
-              <!--
-                Any callbacks of type PasswordCallback or ValidatedCreatePasswordCallback can all be handled by the Text component
-              -->
-              <app-password
-                *ngSwitchCase="'PasswordCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setPassword($event)"
-              ></app-password>
-              <app-password
-                *ngSwitchCase="'ValidatedCreatePasswordCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setPassword($event)"
-              ></app-password>
-
-              <!--
-                Handle a BooleanAttributeInputCallback using the Boolean component.
-              -->
-              <app-boolean
-                *ngSwitchCase="'BooleanAttributeInputCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setValue($event)"
-              ></app-boolean>
-
-              <!--
-                Handle a ChoiceCallback using the Choice component.
-              -->
-              <app-choice
-                *ngSwitchCase="'ChoiceCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setChoiceValue($event)"
-              ></app-choice>
-
-              <!--
-                Handle a TermsAndConditionsCallback using the TermsConditions component.
-              -->
-              <app-terms-conditions
-                *ngSwitchCase="'TermsAndConditionsCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setAccepted($event)"
-              ></app-terms-conditions>
-
-              <!--
-                Handle a KbaCreateCallback using the Kba component.
-                Emitted questions and answers are used to set the values on the callback.
-              -->
-              <app-kba
-                *ngSwitchCase="'KbaCreateCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (setQuestion)="$any(callback).setQuestion($event)"
-                (setAnswer)="$any(callback).setAnswer($event)"
-              ></app-kba>
-
-              <!--
-                 If current callback is not supported, render a warning message
-              -->
-              <app-unknown *ngSwitchDefault [callback]="callback"></app-unknown>
-```
+{: .diff-highlight}
 
 Refresh the page, and you should now have a dynamic form that reacts to the callbacks returned from our initial call to ForgeRock.
 
@@ -546,35 +459,30 @@ Refresh the login page and use the test user to login. You will get a mostly bla
 
 {% include full-image-with-caption.html imageurl="/images/community/build-angular-app/login-page-empty-success.png" title="Successful request without handling render" caption="Screenshot of empty login form & network request showing success data" %}
 
-You may ask, “How did the user’s input values get added to the `step` object?” Let’s take a look at the component for rendering the username input. Open up the `Text` component: `app/features/journey/text/text.component.ts` and `app/features/journey/text/text.component.html`. When the user changes the value of the input, the `(input)` event fires and calls `updateValue()`, which in turn uses the `EventEmitter` defined in the `@Output` directive to emit the updated value to the parent component - in this case, the `FormComponent`. From here, the `FormComponent` calls the appropriate convenience method in the SDK to set the value for the callback. This final piece is shown below (this is already in your project so no need to copy in):
-```
-              <app-text
-                *ngSwitchCase="'NameCallback'"
-                [callback]="$any(callback)"
-                [name]="callback?.payload?.input?.[0]?.name"
-                (updatedCallback)="$any(callback).setName($event)"
-              ></app-text>
+You may ask, “How did the user’s input values get added to the `step` object?” Let’s take a look at the component for rendering the username input. Open up the `Text` component: `src/app/features/journey/text/text.component.ts` and `src/app/features/journey/text/text.component.html`. When the user changes the value of the input, the `(input)` event fires and calls `updateValue()`, which in turn uses the `EventEmitter` defined in the `@Output` directive to emit the updated value to the parent component - in this case, the `FormComponent`. From here, the `FormComponent` calls the appropriate convenience method in the SDK to set the value for the callback. This final piece is shown below (this is already in your project so no need to copy in):
+
+```diff-ts
+<app-text *ngSwitchCase="'NameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)"
+</app-text>
 ```
 {: .diff-highlight}
 
 Each callback type has its own collection of methods for getting and setting data in addition to a base set of generic callback methods. These methods are added to the callback prototype by the SDK automatically. For more information about these callback methods, [see our API documentation](https://sdks.forgerock.com/javascript/api-reference-core/index.html), or [the source code in Github](https://github.com/ForgeRock/forgerock-javascript-sdk/tree/master/src/fr-auth/callbacks), for more details.
 
-Now that the form is rendering and submitting, add conditions to the `FormComponent` template (`features/journey/form.html`), to handle the success and error response from ForgeRock. This code should be inserted inside the <ng-container> tag:
+Now that the form is rendering and submitting, add conditions to the `FormComponent` template (`src/app/features/journey/form.html`), to handle the success and error response from ForgeRock. This code should be inserted inside the <ng-container> tag:
 
-```diff-jsx
-  <ng-template #successMessage>
-    <!--
-      Since we have successfully authenticated, show a success message to user while we complete the process and redirect to home page.
-    -->
-    <app-loading [message]="'Success! Redirecting ...'"></app-loading>
-  </ng-template>
+```diff-ts
+<ng-container
+  [ngTemplateOutlet]="success ? successMessage : failure ? failureMessage : step ? callbacks : loading"
+>
++  <ng-template #successMessage>
++     <app-loading [message]="'Success! Redirecting ...'"></app-loading>
++  </ng-template>
 
-  <ng-template #failureMessage>
-    <!--
-      We have failed to authenticate, show a failure message to the user.
-    -->
-    <app-alert [message]="failure?.getMessage()" [type]="'error'"></app-alert>
-  </ng-template>
++  <ng-template #failureMessage>
++   <app-alert [message]="failure?.getMessage()" [type]="'error'"></app-alert>
++  </ng-template>
+@@ collapsed @@   
 ```
 {: .diff-highlight}
 
@@ -588,36 +496,41 @@ At this point, the user is authenticated. The session has been created and a ses
 
 The goal of this flow is to attain a separate set of tokens, replacing the need for cookies as the shared access artifact. The two common tokens are the Access Token and the ID Token. We will focus on the access token in this guide. The specific flow that the SDK uses to acquire these tokens is called the Authorization Code Flow with PKCE.
 
-To start, import the `TokenManager` object from the ForgeRock SDK into the same `form.js` file - replace the import you added to `features/journey/form.ts` earlier with the following code:
+To start, import the `TokenManager` object from the ForgeRock SDK into the same `src/app/features/journey/form.component.ts` file - replace the import you added to `src/app/features/journey/form.ts` earlier with the following code:
 
+```diff-ts
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { UserService } from 'src/app/services/user.service';
+- import { FRAuth, FRLoginFailure, FRLoginSuccess, FRStep } from '@forgerock/javascript-sdk';
++ import { FRAuth, FRLoginFailure, FRLoginSuccess, FRStep, TokenManager, UserManager, } from '@forgerock/javascript-sdk';
+@@ collapsed @@   
 ```
-import {
-  FRAuth,
-  FRLoginFailure,
-  FRLoginSuccess,
-  FRStep,
-  TokenManager,
-  UserManager,
-} from '@forgerock/javascript-sdk';
-```
+{: .diff-highlight}
 
 In addition to the components that we were already importing, we have now imported the `TokenManager` and `UserManager` from the SDK.
 
-Only an authenticated user that has a valid session can successfully request OAuth/OIDC tokens. We must therefore make sure we make this asynchronous token request after we get a `'LoginSuccess'` back from the authentication journey. In the code we wrote in the previous section, our processing of the response means that a `'LoginSuccess'` results in a call to the currently-empty function `handleSuccess`. Let's invoke the OAuth 2.0 flow from here. Note that since the `getTokens` request is asynchronous, `handleSuccess` has been marked `async`.
+Only an authenticated user that has a valid session can successfully request OAuth/OIDC tokens. We must therefore make sure we make this asynchronous token request after we get a `'LoginSuccess'` back from the authentication journey. In the code we wrote in the previous section, our processing of the response means that a `'LoginSuccess'` results in a call to the currently-empty function `handleSuccess`.
+
+Let's invoke the OAuth 2.0 flow from here. Note that since the `getTokens` request is asynchronous, `handleSuccess` has been marked `async`.
 
 Add the following code to the try block within `handleSuccess` to start the flow:
 
+```diff-ts
+@@ collapsed @@   
+async handleSuccess(success?: FRLoginSuccess) {
+    this.success = success;
+
++   try {
++     await TokenManager.getTokens({ forceRenew: true });
++   } catch (err) {
++     console.error(err);
++   }
+}
+@@ collapsed @@
 ```
-      /** *********************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Get OAuth/OIDC tokens with Authorization Code Flow w/PKCE.
-       * ----------------------------------------------------------------------
-       * Details: Since we have successfully authenticated the user, we can now
-       * get the OAuth2/OIDC tokens. We are passing the `forceRenew` option to
-       * ensure we get fresh tokens, regardless of existing tokens.
-       ************************************************************************* */
-      await TokenManager.getTokens({ forceRenew: true });
-```
+{: .diff-highlight}
 
 Once the changes are made, return back to your browser and remove all cookies created from any previous logins. Refresh the page and verify the login form is rendered. If the success message continues to display, make sure “third-party cookies” are also removed.
 
@@ -631,30 +544,49 @@ Now that the user is authenticated and an access token is attained, you can now 
 
 To retrieve user information, we add another single line of code to invoke the `getCurrentUser()` function of the SDK, underneath the `getTokens()` call:
 
+```diff-ts
+@@ collapsed @@
+async handleSuccess(success?: FRLoginSuccess) {
+  this.success = success;
+
+  try {
+    await TokenManager.getTokens({ forceRenew: true });
+
++   let info = await UserManager.getCurrentUser();
+  } catch (err) {
+    console.error(err);
+  }
+}
+@@ collapsed @@
 ```
-      /** *********************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Call the user info endpoint for some basic user data.
-       * ----------------------------------------------------------------------
-       * Details: This is an OAuth2 call that returns user information with a
-       * valid access token. This is optional and only used for displaying
-       * user info in the UI.
-       ********************************************************************* */
-      let info = await UserManager.getCurrentUser();
-```
+{: .diff-highlight}
 
 We want to store the fact that the user is authenticated, together with the user information we retrieved, in a state that can be shared with other Angular components in our app. To do this, we have injected the service `UserService` into `FormComponent`. This service is also injected into other components that should need access to authentication status and user information.
 
 To update the `UserService` and redirect the user to the home page, add the following code below the `getCurrentUser()` call:
 
-```
-      this.userService.info = info;
-      this.userService.isAuthenticated = true;
+```diff-ts
+@@ collapsed @@
+async handleSuccess(success?: FRLoginSuccess) {
+  this.success = success;
 
-      this.router.navigateByUrl('/');
-```
+  try {
+    await TokenManager.getTokens({ forceRenew: true });
 
-Revisit the browser, clear out all cookies, storage and cache, and log in with you test user. If you landed on the home page and the logs in the console show tokens and user data, you have successfully used the access token for retrieving use data. Notice that the home page looks a bit different with an added success alert and message with the user's full name. This is due to the app “reacting” to the state in the `UserService` that we set just before the redirection.
+    let info = await UserManager.getCurrentUser();
++   this.userService.info = info;
++   this.userService.isAuthenticated = true;
+
++   this.router.navigateByUrl('/');
+  } catch (err) {
+    console.error(err);
+  }
+}
+@@ collapsed @@
+```
+{: .diff-highlight}
+
+Revisit the browser, clear out all cookies, storage and cache, and log in with your test user. If you landed on the home page and the logs in the console show tokens and user data, you have successfully used the access token for retrieving use data. Notice that the home page looks a bit different with an added success alert and message with the user's full name. This is due to the app “reacting” to the state in the `UserService` that we set just before the redirection.
 
 {% include full-image-with-caption.html imageurl="/images/community/build-angular-app/home-page-authenticated-userinfo.png" title="Home page with userinfo" caption="Screenshot of home page with successful login and user info" %}
 
@@ -668,26 +600,35 @@ Because the `getCurrentUser()` function requires the user to be authenticated an
 
 To do this, add the `TokenStorage.get` method to the `ngOnInit()` function in the main component - `src/app/app.component.ts`. The following code should go after the `Config.set()` call, and will provide what we need to rehydrate the user's authentication status:
 
+```diff-ts
+@@ collapsed @@
+async ngOnInit(): Promise<void> {
+
+    Config.set({
+      clientId: environment.WEB_OAUTH_CLIENT,
+      redirectUri: environment.APP_URL,
+      scope: 'openid profile email',
+      serverConfig: {
+        baseUrl: environment.AM_URL,
+        timeout: 30000, // 90000 or less
+      },
+      realmPath: environment.REALM_PATH,
+      tree: environment.JOURNEY_LOGIN,
+    });
+
++   try {
++     // Assume user is likely authenticated if there are tokens
++     let info = await UserManager.getCurrentUser();
++     this.userService.isAuthenticated = true;
++     this.userService.info = info;
++   } catch (err) {
++     // User likely not authenticated
++     console.log(err);
++   }
+}
+@@ collapsed @@
 ```
-    /** *****************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Optional client-side route access validation
-     * ------------------------------------------------------------------
-     * Details: Here, you could just make sure tokens exist –
-     * TokenStorage.get() – or, validate tokens, renew expiry timers,
-     * session checks ... Below, we are calling the userinfo endpoint to
-     * ensure valid tokens before continuing, but it's optional.
-     ***************************************************************** */
-    try {
-      // Assume user is likely authenticated if there are tokens
-      let info = await UserManager.getCurrentUser();
-      this.userService.isAuthenticated = true;
-      this.userService.info = info;
-    } catch (err) {
-      // User likely not authenticated
-      console.log(err);
-    }
-```
+{: .diff-highlight}
 
 With a global state API available throughout the app using `UserService`, different components can pull this state in and use it to conditionally render one set of UI elements versus another. Navigation elements and the displaying of profile data are good examples of such conditional rendering. Examples of this can be found by reviewing `src/app/layout/header/header.component.ts` and `src/app/views/home/home.component.ts`.
 
@@ -699,34 +640,32 @@ You can ensure the token is still valid with the use of `getCurrentUser` method 
 
 To validate a token for protecting a route, open the `src/app/auth/auth.guard.ts` file which uses the `CanActivate` interface, replace the existing false function return with the following code:
 
+```diff-ts
+@@ collapsed @@
+async canActivate(
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+): Promise<true | UrlTree> {
+-   return false;
++   if (this.userService.isAuthenticated) {
++     return true;
++   } else {
++       try {
++         // Assume user is likely authenticated if there are tokens
++         const info = await UserManager.getCurrentUser();
++         this.userService.isAuthenticated = true;
++         this.userService.info = info;
++         return true;
++       } catch (err) {
++         // User likely not authenticated
++         console.log(err);
++         return this.router.parseUrl('/login');
++       }
++   }
+}
+@@ collapsed @@
 ```
-    if (this.userService.isAuthenticated) {
-      return true;
-    } else {
-      try {
-        // Assume user is likely authenticated if there are tokens
-
-        /** *****************************************************************
-         * SDK INTEGRATION POINT
-         * Summary: Optional client-side route access validation
-         * ------------------------------------------------------------------
-         * Details: Here, you could just make sure tokens exist –
-         * TokenStorage.get() – or, validate tokens, renew expiry timers,
-         * session checks ... Below, we are calling the userinfo endpoint to
-         * ensure valid tokens before continuing, but it's optional.
-         ***************************************************************** */
-        const info = await UserManager.getCurrentUser();
-        this.userService.isAuthenticated = true;
-        this.userService.info = info;
-        return true;
-      } catch (err) {
-        // User likely not authenticated
-        console.log(err);
-        return this.router.parseUrl('/login');
-      }
-    }
-  }
-```
+{: .diff-highlight}
 
 Let’s take a look at what this implementation does. First, we check the injected `UserService` for the user's authentication status. If this has been set to true by another part of the application, we provide access to the page by returning true. However if it isn't, then we will run through the same check that the main component `src/app/app.component.ts` performs. If this fails, i.e. if the user is not authenticated, then they are redirected back to the login page to authenticate.
 
@@ -746,34 +685,35 @@ All requests to the Todos backend live in the `TodoService`, which is injected i
 
 To import the `HttpClient`, add the following import to the top of `src/app/services/todo.service.ts`:
 
+```diff-ts
+import { Injectable } from '@angular/core';
+import { Todo } from '../features/todo/todo';
+import { environment } from '../../environments/environment';
++ import { HttpClient } from '@forgerock/javascript-sdk';
+@@ collapsed @@
 ```
-import { HttpClient } from '@forgerock/javascript-sdk';
-```
+{: .diff-highlight}
 
 Now, complete the `request()` function to use the `HttpClient` to make requests to the Todos backend - replace the existing return statement with the following:
 
+```diff-ts
+@@ collapsed @@
+request(resource: string, method: string, data?: Todo): Promise<Response> {
++   return HttpClient.request({
++     url: resource,
++     init: {
++       headers: {
++         'Content-Type': 'application/json',
++       },
++       body: JSON.stringify(data),
++       method: method,
++     },
++     timeout: 5000,
++   });
+}
+@@ collapsed @@
 ```
-    /** ***********************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: HttpClient for protected resource server requests.
-     * ------------------------------------------------------------------------
-     * Details: This helper retrieves your access token from storage and adds
-     * it to the authorization header as a bearer token for making HTTP
-     * requests to protected resource APIs. It's a wrapper around the native
-     * fetch method.
-     *********************************************************************** */
-    return HttpClient.request({
-      url: resource,
-      init: {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        method: method,
-      },
-      timeout: 5000,
-    });
-```
+{: .diff-highlight}
 
 At this point, the user can login, request access tokens, and access the page of the protected resources (todos). Now, revisit the browser and clear out all cookies, storage and cache. Keeping the developer tools open and on the network tab, log in with you test user. Once you have been redirected to the home page, do the following:
 
@@ -788,33 +728,33 @@ At this point, the user can login, request access tokens, and access the page of
 
 Of course, you can’t have a protected app without providing the ability to log out. Luckily, this is a fairly easy task using the SDK.
 
-Open up the `LogoutComponent` file `src/app/services/todo.service.ts` and import `FRUser` from the ForgeRock SDK:
+Open up the `LogoutComponent` file `src/app/features/logout/logout.component.ts` and import `FRUser` from the ForgeRock SDK:
 
+```diff-ts
+@@ collapsed @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
++ import { FRUser } from '@forgerock/javascript-sdk';
+@@ collapsed @@
 ```
-import { FRUser } from '@forgerock/javascript-sdk';
-```
+{: .diff-highlight}
 
 Logging the user out and revoking their tokens is easy using the `logout()` function of `FRUser`. To do this, then clear the user's authentication status and user information from `UserService` (and therefore other parts of the application since this is injected in many places), add the following code to `logout()`:
 
-```
-    try {
-      /** *********************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Logout, end session and revoke tokens
-       * ----------------------------------------------------------------------
-       * Details: Since this method is a global method via the Context API,
-       * any part of the application can log a user out. This is helpful when
-       * APIs are called and we get a 401 response, but here we respond to user
-       * input clicking logout.
-       ********************************************************************* */
-      await FRUser.logout();
-      this.userService.info = undefined;
-      this.userService.isAuthenticated = false;
-      setTimeout(() => this.redirectToHome(), 1000);
-    } catch (err) {
-      console.error(`Error: logout did not successfully complete; ${err}`);
-    }
-  }
+```diff-ts
+@@ collapsed @@
+async logout() {
++ try {
++   await FRUser.logout();
++   this.userService.info = undefined;
++   this.userService.isAuthenticated = false;
++   setTimeout(() => this.redirectToHome(), 1000);
++ } catch (err) {
++   console.error(`Error: logout did not successfully complete; ${err}`);
++ }
+}
+@@ collapsed @@
 ```
 {: .diff-highlight}
 
