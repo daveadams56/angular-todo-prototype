@@ -329,6 +329,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { UserService } from 'src/app/services/user.service';
+- import { FRLoginFailure, FRLoginSuccess, FRStep } from '@forgerock/javascript-sdk';
 + import { FRAuth, FRLoginFailure, FRLoginSuccess, FRStep } from '@forgerock/javascript-sdk';
 @@ collapsed @@
 ```
@@ -342,14 +343,14 @@ Add the following code to the `nextStep` function to call the start function, in
 @@ collapsed @@
 async nextStep(step?: FRStep): Promise<void> {
   this.submittingForm = true;
-
-  try {
++
++ try {
 +   let nextStep = await FRAuth.next(step, { tree: this.tree });
-  } catch (err) {
-      console.log(err);
-  } finally {
-      this.submittingForm = false;
-  } 
++ } catch (err) {
++     console.log(err);
++ } finally {
++     this.submittingForm = false;
++ } 
 }
 @@ collapsed @@
 ```
@@ -475,13 +476,13 @@ Now that the form is rendering and submitting, add conditions to the `FormCompon
 <ng-container
   [ngTemplateOutlet]="success ? successMessage : failure ? failureMessage : step ? callbacks : loading"
 >
-+  <ng-template #successMessage>
+   <ng-template #successMessage>
 +     <app-loading [message]="'Success! Redirecting ...'"></app-loading>
-+  </ng-template>
+   </ng-template>
 
-+  <ng-template #failureMessage>
+   <ng-template #failureMessage>
 +   <app-alert [message]="failure?.getMessage()" [type]="'error'"></app-alert>
-+  </ng-template>
+   </ng-template>
 @@ collapsed @@   
 ```
 {: .diff-highlight}
@@ -496,7 +497,7 @@ At this point, the user is authenticated. The session has been created and a ses
 
 The goal of this flow is to attain a separate set of tokens, replacing the need for cookies as the shared access artifact. The two common tokens are the Access Token and the ID Token. We will focus on the access token in this guide. The specific flow that the SDK uses to acquire these tokens is called the Authorization Code Flow with PKCE.
 
-To start, import the `TokenManager` object from the ForgeRock SDK into the same `src/app/features/journey/form.component.ts` file - replace the import you added to `src/app/features/journey/form.ts` earlier with the following code:
+To start, import the `TokenManager` object from the ForgeRock SDK into the same `src/app/features/journey/form.component.ts` file - replace the import you added earlier with the following code:
 
 ```diff-ts
 import { Component, Input, OnInit } from '@angular/core';
@@ -638,7 +639,16 @@ The presence of the access token can be a good _hint_ for authentication, but it
 
 You can ensure the token is still valid with the use of `getCurrentUser` method from earlier. This is optional, depending on your product requirements. If needed, you can protect routes with a token validation check before rendering portions of your application. This can prevent a potentially jarring experience of partial rendering UI that may be ejected due to an invalid token.
 
-To validate a token for protecting a route, open the `src/app/auth/auth.guard.ts` file which uses the `CanActivate` interface, replace the existing false function return with the following code:
+To validate a token for protecting a route, open the `src/app/auth/auth.guard.ts` file which uses the `CanActivate` interface, first import the `UserManager` from the SDK:
+
+```diff-ts
+@@ collapsed @@
+import { UserService } from '../services/user.service';
++ import { UserManager } from '@forgerock/javascript-sdk';
+@@ collapsed @@
+```
+
+Then, replace the existing function return within `canActivate` with the following code:
 
 ```diff-ts
 @@ collapsed @@
@@ -646,7 +656,7 @@ async canActivate(
   next: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ): Promise<true | UrlTree> {
--   return false;
+-   return true;
 +   if (this.userService.isAuthenticated) {
 +     return true;
 +   } else {
@@ -699,6 +709,7 @@ Now, complete the `request()` function to use the `HttpClient` to make requests 
 ```diff-ts
 @@ collapsed @@
 request(resource: string, method: string, data?: Todo): Promise<Response> {
+-   return new Promise((resolve, reject) => reject('Method not implemented'));  
 +   return HttpClient.request({
 +     url: resource,
 +     init: {
