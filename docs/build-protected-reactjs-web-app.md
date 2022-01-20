@@ -679,15 +679,11 @@ async canActivate(
 
 Let’s take a look at what this implementation does. First, we check the injected `UserService` for the user's authentication status. If this has been set to true by another part of the application, we provide access to the page by returning true. However if it isn't, then we will run through the same check that the main component `src/app/app.component.ts` performs. If this fails, i.e. if the user is not authenticated, then they are redirected back to the login page to authenticate.
 
-Revisit the browser and refresh the page. Navigate to the todos page. You will notice a quick spinner and text communicating that the app is "verifying access". Once the server responds, the Todos page renders. As you can see, the consequence of this is the protected route now has to wait for the server to respond, but the user's access has been verified by the server.
-
-{% include full-image-with-caption.html imageurl="/images/community/build-angular-app/verifying-access.png" title="Loading screen while verifying access" caption="Screenshot of loading screen while verifying access" %}
+Revisit the browser and refresh the page. Navigate to the todos page. You will notice a quick spinner and text communicating that the app is "verifying access". Once the server responds, the Todos page renders. The consequence of this is the protected route now has to wait for the server to respond, but the user's access has been verified by the server.
 
 ### Step 7. Request protected resources with an access token
 
 Once the Todos page renders, notice how the the todo collection has a persistent spinner to indicate the process of requesting todos. This is due to the `fetch` request not having the proper headers for making an authorized request, so the request does not succeed.
-
-{% include full-image-with-caption.html imageurl="/images/community/build-angular-app/todos-page-loading.png" title="To-dos page loading to-dos" caption="Screenshot of to-dos page with persistent spinner" %}
 
 To make resource requests to a protected endpoint, we have an `HttpClient` module that provides a simple wrapper around the native `fetch` method of the browser. When you call the `request` method, it will retrieve the user’s access token, and attach it as a Bearer Token to the request as an `authorization` header. This is what the resource server will use to make its own request to the ForgeRock server to validate the user’s access token.
 
