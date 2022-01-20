@@ -14,7 +14,7 @@ of the MIT license. See the LICENSE file for details.
   Once we have a step, we then need to ensure we don't already have a success or failure. If we have a step but don't have a success or failure, we will likely have callbacks that we will need to present to the user in their render component form.
 -->
 <ng-container
-  [ngTemplateOutlet]="
+              [ngTemplateOutlet]="
     success
       ? successMessage
       : failure
@@ -22,8 +22,7 @@ of the MIT license. See the LICENSE file for details.
       : step
       ? callbacks
       : loading
-  "
->
+  ">
   <ng-template #loading>
     <!--
       Since there is no step information we need to call AM to retrieve the instructions for rendering the login form.
@@ -32,11 +31,11 @@ of the MIT license. See the LICENSE file for details.
   </ng-template>
 
   <ng-template #successMessage>
-
+    <app-loading [message]="'Success! Redirecting ...'"></app-loading>
   </ng-template>
 
   <ng-template #failureMessage>
-    
+    <app-alert [message]="failure?.getMessage()" [type]="'error'"></app-alert>
   </ng-template>
 
   <ng-template #callbacks>
@@ -46,6 +45,21 @@ of the MIT license. See the LICENSE file for details.
     <div>
       <h1 class="text-center fs-2 mb-3" *ngIf="title">{{ title }}</h1>
       <div id="callbacks">
+        <form #callbackForm (ngSubmit)="nextStep(step)" ngNativeValidate class="cstm_form">
+          <div *ngFor="let callback of step?.callbacks" v-bind:key="callback.payload._id">
+            <container-element [ngSwitch]="callback.getType()">
+              <app-text *ngSwitchCase="'NameCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setName($event)">
+              </app-text>
+
+              <app-password *ngSwitchCase="'PasswordCallback'" [callback]="$any(callback)" [name]="callback?.payload?.input?.[0]?.name" (updatedCallback)="$any(callback).setPassword($event)">
+              </app-password>
+
+              <app-unknown *ngSwitchDefault [callback]="callback"></app-unknown>
+            </container-element>
+          </div>
+          <app-button [buttonText]="buttonText" [submittingForm]="submittingForm">
+          </app-button>
+        </form>
       </div>
     </div>
   </ng-template>

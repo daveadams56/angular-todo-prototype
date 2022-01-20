@@ -11,12 +11,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import {
-  FRLoginFailure,
-  FRLoginSuccess,
-  FRStep,
-} from '@forgerock/javascript-sdk';
-import { UserService } from 'src/app/services/user.service';
+import { FRAuth, FRLoginFailure, FRLoginSuccess, FRStep, TokenManager, UserManager, } from '@forgerock/javascript-sdk'; import { UserService } from 'src/app/services/user.service';
 
 /**
  * Used to display a login / registration form to the user, with authentication callbacks dynamically rendered based on the tree / journey
@@ -66,7 +61,7 @@ export class FormComponent implements OnInit {
    */
   tree?: string;
 
-  constructor(private router: Router, public userService: UserService) {}
+  constructor(private router: Router, public userService: UserService) { }
 
   ngOnInit(): void {
     this.setConfigForAction(this.action);
@@ -79,6 +74,28 @@ export class FormComponent implements OnInit {
    */
   async nextStep(step?: FRStep): Promise<void> {
     this.submittingForm = true;
+
+    try {
+      let nextStep = await FRAuth.next(step, { tree: this.tree });
+
+      switch (nextStep.type) {
+        case 'LoginFailure':
+          this.handleFailure(nextStep);
+          break;
+        case 'LoginSuccess':
+          this.handleSuccess(nextStep);
+          break;
+        case 'Step':
+          this.handleStep(nextStep);
+          break;
+        default:
+          this.handleFailure();
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      this.submittingForm = false;
+    }
   }
 
   handleFailure(failure?: FRLoginFailure) {
@@ -91,6 +108,19 @@ export class FormComponent implements OnInit {
    */
   async handleSuccess(success?: FRLoginSuccess) {
     this.success = success;
+
+    try {
+      await TokenManager.getTokens({ forceRenew: true });
+
+      let info = await UserManager.getCurrentUser();
+
+      this.userService.info = info;
+      this.userService.isAuthenticated = true;
+
+      this.router.navigateByUrl('/');
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   /**
