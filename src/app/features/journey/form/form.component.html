@@ -42,12 +42,6 @@ of the MIT license. See the LICENSE file for details.
     <div>
       <h1 class="text-center fs-2 mb-3" *ngIf="title">{{ title }}</h1>
       <div id="callbacks">
-        <form
-          #callbackForm
-          (ngSubmit)="nextStep(step)"
-          ngNativeValidate
-          class="cstm_form"
-        ></form>
       </div>
     </div>
   </ng-template>
