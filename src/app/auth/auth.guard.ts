@@ -17,7 +17,7 @@ import {
   Router,
 } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { UserManager } from '@forgerock/javascript-sdk';
+import { Tokens, TokenStorage, UserManager } from '@forgerock/javascript-sdk';
 
 @Injectable({
   providedIn: 'root',
@@ -34,32 +34,31 @@ export class AuthGuard implements CanActivate {
    */
   async canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Promise<true | UrlTree> {
-    if (this.userService.isAuthenticated) {
-      return true;
-    } else {
-      try {
-        // Assume user is likely authenticated if there are tokens
+    const loginUrl = this.router.parseUrl('/login');
+    try {
+      // Assume user is likely authenticated if there are tokens
 
-        /** *****************************************************************
+      /** *****************************************************************
          * SDK INTEGRATION POINT
          * Summary: Optional client-side route access validation
          * ------------------------------------------------------------------
-         * Details: Here, you could just make sure tokens exist –
-         * TokenStorage.get() – or, validate tokens, renew expiry timers,
-         * session checks ... Below, we are calling the userinfo endpoint to
+         * Details: Here, we make sure tokens exist using TokenStorage.get()
+         * however there are other checks – validate tokens, session checks..
+         * In this case, we are calling the userinfo endpoint to
          * ensure valid tokens before continuing, but it's optional.
          ***************************************************************** */
-        const info = await UserManager.getCurrentUser();
-        this.userService.isAuthenticated = true;
-        this.userService.info = info;
-        return true;
-      } catch (err) {
-        // User likely not authenticated
-        console.log(err);
-        return this.router.parseUrl('/login');
+      const tokens: Tokens = await TokenStorage.get();
+      const info = await UserManager.getCurrentUser();
+      if (tokens === undefined || info === undefined) {
+        return loginUrl;
       }
+      return true;
+    } catch (err) {
+      // User likely not authenticated
+      console.log(err);
+      return loginUrl;
     }
   }
 }
