@@ -9,10 +9,11 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { Config, UserManager } from '@forgerock/javascript-sdk';
+import { Config, TokenManager, UserManager } from '@forgerock/javascript-sdk';
 import { environment } from '../environments/environment';
 import { UserService } from './services/user.service';
 import {
+  ActivatedRoute,
   NavigationCancel,
   NavigationEnd,
   NavigationError,
@@ -29,7 +30,7 @@ export class AppComponent implements OnInit {
   title = 'angular-todo-prototype';
   loading = false;
 
-  constructor(public userService: UserService, private router: Router) {
+  constructor(public userService: UserService, router: Router) {
     const navStart = router.events.pipe(
       filter((evt) => evt instanceof NavigationStart),
     ) as Observable<NavigationStart>;
@@ -73,7 +74,7 @@ export class AppComponent implements OnInit {
       scope: 'openid profile email',
       serverConfig: {
         baseUrl: environment.AM_URL,
-        timeout: 30000, // 90000 or less
+        timeout: 3000, // 90000 or less
       },
       realmPath: environment.REALM_PATH,
       tree: environment.JOURNEY_LOGIN,
@@ -90,7 +91,7 @@ export class AppComponent implements OnInit {
      ***************************************************************** */
     try {
       // Assume user is likely authenticated if there are tokens
-      let info = await UserManager.getCurrentUser();
+      const info = await UserManager.getCurrentUser();
       this.userService.isAuthenticated = true;
       this.userService.info = info;
     } catch (err) {

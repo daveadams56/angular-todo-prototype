@@ -8,9 +8,7 @@ This software may be modified and distributed under the terms
 of the MIT license. See the LICENSE file for details.
 -->
 
-<div
-  class="cstm_container_v-centered container-fluid d-flex align-items-center"
->
+<div class="cstm_container_v-centered container-fluid d-flex align-items-center">
   <div class="w-100">
     <app-back-home></app-back-home>
 
@@ -24,6 +22,21 @@ of the MIT license. See the LICENSE file for details.
       <p class="text-center text-secondary p-3">
         Don’t have an account?
         <a [routerLink]="'/register'">Sign up here!</a>
+      </p>
+
+      <div class="text-center">
+        <div class="row">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center">
+        <br />
+        <button class="btn btn-warning w-50" (click)="startCentralizedLogin()">
+          <span>SSO with ForgeRock</span>
+        </button>
       </p>
     </div>
   </div>

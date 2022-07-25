@@ -15,13 +15,7 @@ of the MIT license. See the LICENSE file for details.
 -->
 <ng-container
   [ngTemplateOutlet]="
-    success
-      ? successMessage
-      : failure
-      ? failureMessage
-      : step
-      ? callbacks
-      : loading
+    success ? successMessage : failure ? failureMessage : step ? callbacks : loading
   "
 >
   <ng-template #loading>
@@ -52,21 +46,13 @@ of the MIT license. See the LICENSE file for details.
     <div>
       <h1 class="text-center fs-2 mb-3" *ngIf="title">{{ title }}</h1>
       <div id="callbacks">
-        <form
-          #callbackForm
-          (ngSubmit)="nextStep(step)"
-          ngNativeValidate
-          class="cstm_form"
-        >
+        <form #callbackForm (ngSubmit)="nextStep(step)" ngNativeValidate class="cstm_form">
           <!--
             Iterate through callbacks received from AM and invoke the callback to the appropriate callback component.
             The input to each component will be the callback and callback name, and the outputs will be the events emitted by the component.
             Events emitted by each component are handled by an expression mapping them to SDK functions, e.g. to set the password on the callback using the emitted value.
           -->
-          <div
-            *ngFor="let callback of step?.callbacks"
-            v-bind:key="callback.payload._id"
-          >
+          <div *ngFor="let callback of step?.callbacks" v-bind:key="callback.payload._id">
             <!--
             ************************************************************************
             * SDK INTEGRATION POINT
@@ -147,6 +133,30 @@ of the MIT license. See the LICENSE file for details.
               ></app-choice>
 
               <!--
+                Handle a ConfirmationCallback using the Confirmation component.
+              -->
+              <app-confirmation
+                *ngSwitchCase="'ConfirmationCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+                (updatedCallback)="$any(callback).setInputValue($event); nextStep(step)"
+              ></app-confirmation>
+
+              <!--
+                Handle a TextOutputCallback using the TextOutput component.
+              -->
+              <app-text-output
+                *ngSwitchCase="'TextOutputCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+              ></app-text-output>
+              <app-text-output
+                *ngSwitchCase="'SuspendedTextOutputCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+              ></app-text-output>
+
+              <!--
                 Handle a TermsAndConditionsCallback using the TermsConditions component.
               -->
               <app-terms-conditions
@@ -169,6 +179,74 @@ of the MIT license. See the LICENSE file for details.
               ></app-kba>
 
               <!--
+                Handle a MetadataCallback using the WebAuthn component.
+                This callback may contain a WebAuthn attempt.
+              -->
+              <div *ngSwitchCase="'MetadataCallback'">
+                <!--
+                  Try WebAuthn
+                -->
+                <app-webauthn
+                  [step]="step"
+                  [name]="callback?.payload?.input?.[0]?.name"
+                  (updatedCallback)="nextStep($event)"
+                ></app-webauthn>
+              </div>
+
+              <!--
+                Handle a HiddenValueCallback using the HiddenValue component.
+                This callback may contain a QR code to be rendered for MFA registration.
+              -->
+              <app-hidden-value
+                *ngSwitchCase="'HiddenValueCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+              ></app-hidden-value>
+
+              <!--
+                Handle a DeviceProfileCallback using the DeviceProfile component.
+              -->
+              <app-device-profile
+                *ngSwitchCase="'DeviceProfileCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+                (updatedCallback)="$any(callback).setProfile($event); nextStep(step)"
+              >
+              </app-device-profile>
+
+              <!--
+                Handle a SelectIDPCallback using the SelectIDP component.
+              -->
+              <app-select-idp
+                *ngSwitchCase="'SelectIdPCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+                (updatedCallback)="$any(callback).setProvider($event); nextStep(step)"
+              ></app-select-idp>
+
+              <!--
+                Handle a RedirectCallback using the Redirect component.
+                This component will redirect the user away from this page.
+              -->
+              <app-redirect
+                *ngSwitchCase="'RedirectCallback'"
+                [step]="$any(step)"
+                [name]="callback?.payload?.input?.[0]?.name"
+              ></app-redirect>
+
+              <!--
+                Handle a PollingWaitCallback using the PollingWait component.
+                This callback may display a spinner depending on whether a QR code is rendered elsewhere.
+              -->
+              <app-polling-wait
+                *ngSwitchCase="'PollingWaitCallback'"
+                [callback]="$any(callback)"
+                [name]="callback?.payload?.input?.[0]?.name"
+                [step]="step"
+                (waitingFinished)="nextStep(step)"
+              ></app-polling-wait>
+
+              <!--
                  If current callback is not supported, render a warning message
               -->
               <app-unknown *ngSwitchDefault [callback]="callback"></app-unknown>
@@ -178,6 +256,7 @@ of the MIT license. See the LICENSE file for details.
             Show a button to submit the form
           -->
           <app-button
+            *ngIf="shouldShowSubmitButton()"
             [buttonText]="buttonText"
             [submittingForm]="submittingForm"
           ></app-button>

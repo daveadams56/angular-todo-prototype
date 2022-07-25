@@ -49,6 +49,14 @@ import { AccountIconComponent } from './icons/account-icon/account-icon.componen
 import { TodoIconComponent } from './icons/todo-icon/todo-icon.component';
 import { ActionIconComponent } from './icons/action-icon/action-icon.component';
 import { ChoiceComponent } from './features/journey/choice/choice.component';
+import { WebAuthnComponent } from './features/journey/webauthn/webauthn.component';
+import { DeviceProfileComponent } from './features/journey/device-profile/device-profile.component';
+import { SelectIDPComponent } from './features/journey/select-idp/select-idp.component';
+import { RedirectComponent } from './features/journey/redirect/redirect.component';
+import { ConfirmationComponent } from './features/journey/confirmation/confirmation.component';
+import { TextOutputComponent } from './features/journey/text-output/text-output.component';
+import { PollingWaitComponent } from './features/journey/polling-wait/polling-wait.component';
+import { HiddenValueComponent } from './features/journey/hidden-value/hidden-value.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +95,14 @@ import { ChoiceComponent } from './features/journey/choice/choice.component';
     TodoIconComponent,
     ActionIconComponent,
     ChoiceComponent,
+    WebAuthnComponent,
+    DeviceProfileComponent,
+    SelectIDPComponent,
+    RedirectComponent,
+    ConfirmationComponent,
+    TextOutputComponent,
+    PollingWaitComponent,
+    HiddenValueComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

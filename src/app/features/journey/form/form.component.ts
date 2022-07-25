@@ -9,17 +9,19 @@
  */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import {
+  CallbackType,
   FRAuth,
   FRLoginFailure,
   FRLoginSuccess,
   FRStep,
+  StepType,
   TokenManager,
   UserManager,
 } from '@forgerock/javascript-sdk';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from '../../../services/user.service';
 
 /**
  * Used to display a login / registration form to the user, with authentication callbacks dynamically rendered based on the tree / journey
@@ -62,18 +64,36 @@ export class FormComponent implements OnInit {
   /**
    * If the form is currently being submitted we want to display a spinner on the submit button
    */
-  submittingForm: boolean = false;
+  submittingForm = false;
 
   /**
    * The authentication tree or journey being specified in this authentication attempt
    */
   tree?: string;
 
-  constructor(private router: Router, public userService: UserService) {}
+  constructor(
+    private router: Router,
+    public userService: UserService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
-    this.setConfigForAction(this.action);
-    this.nextStep();
+    this.route.queryParams.subscribe(async (params) => {
+      if (params.code && params.state) {
+        // TODO make sure tree is correct on resume if it has been overridden by query param
+        const resume = await FRAuth.resume(window.location.href);
+        this.processStep(resume);
+      } else if (params.suspendedId && params.authIndexType && params.authIndexValue) {
+        this.tree = params.authIndexValue;
+        const resume = await FRAuth.next(undefined, {
+          query: { suspendedId: params.suspendedId },
+        });
+        this.processStep(resume);
+      } else {
+        this.setConfigForAction(this.action);
+        this.nextStep();
+      }
+    });
   }
 
   /**
@@ -91,32 +111,35 @@ export class FormComponent implements OnInit {
        * Details: This calls the next method with the previous step, expecting
        * the next step to be returned, or a success or failure.
        ********************************************************************* */
-      let nextStep = await FRAuth.next(step, { tree: this.tree });
-
-      /** *******************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Handle step based on step type
-       * --------------------------------------------------------------------
-       * Details: Determine whether the step is a login failure, success or
-       * next step in the authentication journey, and handle appropriately.
-       ******************************************************************* */
-      switch (nextStep.type) {
-        case 'LoginFailure':
-          this.handleFailure(nextStep);
-          break;
-        case 'LoginSuccess':
-          this.handleSuccess(nextStep);
-          break;
-        case 'Step':
-          this.handleStep(nextStep);
-          break;
-        default:
-          this.handleFailure();
-      }
+      const nextStep = await FRAuth.next(step, { tree: this.tree });
+      this.processStep(nextStep);
     } catch (err) {
       console.log(err);
     } finally {
       this.submittingForm = false;
+    }
+  }
+
+  processStep(step: FRLoginFailure | FRLoginSuccess | FRStep): void {
+    /** *******************************************************************
+     * SDK INTEGRATION POINT
+     * Summary: Handle step based on step type
+     * --------------------------------------------------------------------
+     * Details: Determine whether the step is a login failure, success or
+     * next step in the authentication journey, and handle appropriately.
+     ******************************************************************* */
+    switch (step.type) {
+      case StepType.LoginFailure:
+        this.handleFailure(step);
+        break;
+      case StepType.LoginSuccess:
+        this.handleSuccess(step);
+        break;
+      case StepType.Step:
+        this.handleStep(step);
+        break;
+      default:
+        this.handleFailure();
     }
   }
 
@@ -131,32 +154,36 @@ export class FormComponent implements OnInit {
   async handleSuccess(success?: FRLoginSuccess) {
     this.success = success;
 
-    try {
-      /** *********************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Get OAuth/OIDC tokens with Authorization Code Flow w/PKCE.
-       * ----------------------------------------------------------------------
-       * Details: Since we have successfully authenticated the user, we can now
-       * get the OAuth2/OIDC tokens. We are passing the `forceRenew` option to
-       * ensure we get fresh tokens, regardless of existing tokens.
-       ************************************************************************* */
-      await TokenManager.getTokens({ forceRenew: true });
+    if (this.userService.goto) {
+      window.location.href = this.userService.goto;
+    } else {
+      try {
+        /** *********************************************************************
+         * SDK INTEGRATION POINT
+         * Summary: Get OAuth/OIDC tokens with Authorization Code Flow w/PKCE.
+         * ----------------------------------------------------------------------
+         * Details: Since we have successfully authenticated the user, we can now
+         * get the OAuth2/OIDC tokens. We are passing the `forceRenew` option to
+         * ensure we get fresh tokens, regardless of existing tokens.
+         ************************************************************************* */
+        await TokenManager.getTokens({ forceRenew: true });
 
-      /** *********************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Call the user info endpoint for some basic user data.
-       * ----------------------------------------------------------------------
-       * Details: This is an OAuth2 call that returns user information with a
-       * valid access token. This is optional and only used for displaying
-       * user info in the UI.
-       ********************************************************************* */
-      let info = await UserManager.getCurrentUser();
-      this.userService.info = info;
-      this.userService.isAuthenticated = true;
+        /** *********************************************************************
+         * SDK INTEGRATION POINT
+         * Summary: Call the user info endpoint for some basic user data.
+         * ----------------------------------------------------------------------
+         * Details: This is an OAuth2 call that returns user information with a
+         * valid access token. This is optional and only used for displaying
+         * user info in the UI.
+         ********************************************************************* */
+        const info = await UserManager.getCurrentUser();
+        this.userService.info = info;
+        this.userService.isAuthenticated = true;
 
-      this.router.navigateByUrl('/');
-    } catch (err) {
-      console.error(err);
+        this.router.navigateByUrl('/');
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 
@@ -188,8 +215,7 @@ export class FormComponent implements OnInit {
       }
       case 'register': {
         this.title = 'Sign Up';
-        (this.buttonText = 'Register'),
-          (this.tree = environment.JOURNEY_REGISTER);
+        (this.buttonText = 'Register'), (this.tree = environment.JOURNEY_REGISTER);
         break;
       }
       default: {
@@ -199,5 +225,22 @@ export class FormComponent implements OnInit {
         break;
       }
     }
+
+    // Override tree if supplied in query param
+    this.route.queryParams.subscribe(async (params) => {
+      if (params.tree) {
+        this.tree = params.tree;
+      }
+    });
+  }
+
+  shouldShowSubmitButton(): boolean {
+    return (
+      this.step?.getCallbacksOfType(CallbackType.SuspendedTextOutputCallback).length === 0 &&
+      this.step?.getCallbacksOfType(CallbackType.SelectIdPCallback).length === 0 &&
+      this.step?.getCallbacksOfType(CallbackType.RedirectCallback).length === 0 &&
+      this.step?.getCallbacksOfType(CallbackType.ConfirmationCallback).length === 0 &&
+      this.step?.getCallbacksOfType(CallbackType.PollingWaitCallback).length === 0
+    );
   }
 }

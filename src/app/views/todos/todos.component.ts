@@ -84,8 +84,8 @@ export class TodosComponent implements OnInit {
    */
   async getTodos(): Promise<void> {
     try {
-      let todos = await this.todoService.getTodos();
-      let json = await todos.json();
+      const todos = await this.todoService.getTodos();
+      const json = await todos.json();
       this.todos = json as Todo[];
     } catch (err) {
       console.log(err);
