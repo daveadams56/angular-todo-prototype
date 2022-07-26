@@ -54,4 +54,3 @@ users/*
 
 # Environment files
 .env
-/src/environments/*.ts
